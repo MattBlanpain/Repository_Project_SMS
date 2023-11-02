@@ -4,7 +4,7 @@ from os import path
 from flask_login import LoginManager
 
 db = SQLAlchemy()
-DB_NAME = "database.db" ## this is the filename of the SQLite database (stored in instance directory)
+DB_NAME = "database.db"
 
 
 def create_app():
@@ -19,7 +19,7 @@ def create_app():
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
 
-    from .models import User, Note, Skill, SkillArea, SkillCategory, Assessment
+    from .models import User, Note
     
     with app.app_context():
         db.create_all()
@@ -39,4 +39,3 @@ def create_database(app):
     if not path.exists('website/' + DB_NAME):
         db.create_all(app=app)
         print('Created Database!')
-

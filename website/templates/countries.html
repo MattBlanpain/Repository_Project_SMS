@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Countries
+{% endblock %}
+
+{% block content %}
+    <h1 align="center">Countries</h1>
+    <ul class="list-group list-group-flush" id="countries">
+        {% for country in countries %}
+            <li class="list-group-item">
+                {{ country.country_name }} - {{ get_continent_name(country.parent_continent_id) }}
+                <!-- You can add buttons or links for further actions related to countries -->
+            </li>
+        {% endfor %}
+    </ul>
+    <!-- You can add forms or links to add new countries or perform other actions -->
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Cities
+{% endblock %}
+
+{% block content %}
+    <h1 align="center">Cities</h1>
+    <ul class="list-group list-group-flush" id="cities">
+        {% for city in cities %}
+            <li class="list-group-item">
+                {{ city.city_name }}
+                <!-- You can add buttons or links for further actions related to cities -->
+            </li>
+        {% endfor %}
+    </ul>
+    <!-- You can add forms or links to add new cities or perform other actions -->
+{% endblock %}

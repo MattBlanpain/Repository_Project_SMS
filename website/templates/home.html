@@ -1,42 +1,21 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
-  %}
-  <h1 align="center">Skills</h1>
-  <ul class="list-group list-group-flush" id="skills">
-    {% for skill in table_skills %}
-    <li class="list-group-item">
-      {{ skill.skill_name }}
-    </li>
-    {% endfor %}
-      
-   
-    
-  </ul>
-  
-  <form method="POST">
-    <input type="text" id="new_skill_name" name="new_skill_name" required minlength="2" maxlength="150" size="150" />
-    <button type="button" class="close" onClick="createSkill({{ new_skill_name }})">Add Skill</button>
-    <br />
-    <div align="center">
-      <button type="submit" class="btn btn-primary">Add Skill wrong</button>
-    </div>
-  </form>
-  <br>
-  <h1 align="center">Notes</h1>
-  <ul class="list-group list-group-flush" id="notes">
-    {% for note in user.notes %}
-    <li class="list-group-item">
-      {{ note.data }}
-      <button type="button" class="close" onClick="deleteNote({{ note.id }})">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </li>
-    {% endfor %}
-  </ul>
-  <form method="POST">
-    <textarea name="note" id="note" class="form-control"></textarea>
-    <br />
-    <div align="center">
-      <button type="submit" class="btn btn-primary">Add Note</button>
-    </div>
-  </form>
-  {% endblock %}
+    %}
+    <h1 align="center">Notes</h1>
+    <ul class="list-group list-group-flush" id="notes">
+      {% for note in user.notes %}
+      <li class="list-group-item">
+        {{ note.data }}
+        <button type="button" class="close" onClick="deleteNote({{ note.id }})">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </li>
+      {% endfor %}
+    </ul>
+    <form method="POST">
+      <textarea name="note" id="note" class="form-control"></textarea>
+      <br />
+      <div align="center">
+        <button type="submit" class="btn btn-primary">Add Note</button>
+      </div>
+    </form>
+    {% endblock %}

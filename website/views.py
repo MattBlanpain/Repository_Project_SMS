@@ -1,10 +1,9 @@
 from flask import Blueprint, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
 from .models import Note
-from .models import Skill
 from . import db
 import json
-import sqlite3
+from .models import Continent, Country, City
 
 views = Blueprint('views', __name__)
 
@@ -38,22 +37,28 @@ def delete_note():
 
     return jsonify({})
 
+@views.route('/continents', methods=['GET'])
+@login_required
+def continents():
+    continents = Continent.query.all()
+    return render_template('continents.html', continents=continents, user=current_user)
 
-@views.route('/create-skill', methods=['POST'])
-def create_skill():  
-    skill_name_entered = json.loads(request.data) # this function expects a JSON from the INDEX.js file 
-    if len(skill_name_entered) < 5:
-            flash('Skill name is too short!', category='error') 
-    else:
-        new_skill = Skill(skill_name=skill_name_entered)  #providing the schema for the note 
-        db.session.add(new_skill) #adding the skill to the database 
-        db.session.commit()
-        flash('Skill added!', category='success')
+@views.route('/countries', methods=['GET'])
+@login_required
+def view_countries():
+    countries = Country.query.all()
+    # Assuming Continent is another model
+    continents = {continent.continent_id: continent.continent_name for continent in Continent.query.all()}
+    
+    # Define the function within the route handler
+    def get_continent_name(id):
+        return continents.get(id)
 
-    return jsonify({})
+    return render_template('countries.html', countries=countries, get_continent_name=get_continent_name, user=current_user)
 
-
-@views.route('/skill')
-def display_skill_inventory():
-    return render_template("skill.html", user=current_user, list_skills=Skill.query.all())
+@views.route('/cities', methods=['GET'])
+@login_required
+def cities():
+    cities = City.query.all()
+    return render_template('cities.html', cities=cities, user=current_user)
 
