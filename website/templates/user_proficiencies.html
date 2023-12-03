@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}
+    User_Proficiencies
+{% endblock %}
+
+{% block content %}
+
+    <h1>Proficiency Levels for : {{ user.first_name }} {{ user.last_name }}</h1>
+    <div><canvas id="proficiencyChart" width="200" height="200"></canvas></div>
+    <form method="post">
+        <br>
+        <button type="submit">Update my Proficiency Levels</button>
+        <br>
+        <br>
+        <table id="proficiency_levels_edit">
+            <tr>
+                <th>Skill</th>
+                <th>my current Proficiency Level</th>
+                <th>nb</th>
+                <th>change my Proficiency Level</th>
+            </tr>
+            {% for skill in list_skills %}
+            <tr>
+                <td>{{ skill.skill_name }}</td>
+                <td>{{ proficiency_levels[skill.skill_id] }} :
+                        {% if proficiency_levels[skill.skill_id] == 0 %}Not Registered{% endif %}
+                        {% if proficiency_levels[skill.skill_id] == 1 %}No Awareness{% endif %}
+                        {% if proficiency_levels[skill.skill_id] == 2 %}Beginner / Learn{% endif %}
+                        {% if proficiency_levels[skill.skill_id] == 3 %}Intermediate / Deliver{% endif %}
+                        {% if proficiency_levels[skill.skill_id] == 4 %}Advanced / Perform{% endif %}
+                        {% if proficiency_levels[skill.skill_id] == 5 %}Expert / Coach{% endif %}
+                </td>
+                <td data-value="{{ proficiency_levels[skill.skill_id] }}" style="color:white">{{ proficiency_levels[skill.skill_id] }}</td>
+                <td>
+                    <label for="skill_{{ skill.skill_id }}">
+                    </label>
+                    <input type="radio" name="{{ skill.skill_id }}" id="skill_{{ skill.skill_id }}" value="0" {% if proficiency_levels[skill.skill_id] == 0 %}checked{% endif %}>0
+                    <input type="radio" name="{{ skill.skill_id }}" id="skill_{{ skill.skill_id }}" value="1" {% if proficiency_levels[skill.skill_id] == 1 %}checked{% endif %}>1
+                    <input type="radio" name="{{ skill.skill_id }}" id="skill_{{ skill.skill_id }}" value="2" {% if proficiency_levels[skill.skill_id] == 2 %}checked{% endif %}>2
+                    <input type="radio" name="{{ skill.skill_id }}" id="skill_{{ skill.skill_id }}" value="3" {% if proficiency_levels[skill.skill_id] == 3 %}checked{% endif %}>3
+                    <input type="radio" name="{{ skill.skill_id }}" id="skill_{{ skill.skill_id }}" value="4" {% if proficiency_levels[skill.skill_id] == 4 %}checked{% endif %}>4
+                    <input type="radio" name="{{ skill.skill_id }}" id="skill_{{ skill.skill_id }}" value="5" {% if proficiency_levels[skill.skill_id] == 5 %}checked{% endif %}>5
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Data for the pie chart
+        var proficiencyData = [
+            {{ proficiency_counts[0] }},
+            {{ proficiency_counts[1] }},
+            {{ proficiency_counts[2] }},
+            {{ proficiency_counts[3] }},
+            {{ proficiency_counts[4] }},
+            {{ proficiency_counts[5] }},
+        ];
+    
+        var ctx = document.getElementById('proficiencyChart').getContext('2d');
+        var proficiencyChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['0-Not Registered', '1-No Awareness', '2-Beginner / Learn', '3-Intermediate / Deliver', '4-Advanced / Perform', '5-Expert / Coach'],
+                datasets: [{
+                    data: proficiencyData,
+                    backgroundColor: [
+                        'rgba(0, 0, 0, 1)',
+                        'rgba(5, 16, 110, 1)',
+                        'rgba(10, 55, 166, 1)',
+                        'rgba(0, 125, 255, 1)',
+                        'rgba(12, 164, 235, 1)',
+                        'rgba(13, 224, 255, 1)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    </script>    
+
+{% endblock %}

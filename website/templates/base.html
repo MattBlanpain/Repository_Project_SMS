@@ -14,11 +14,22 @@
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       crossorigin="anonymous"
     />
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      var currentuserid = {{ user.id }};
+    </script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='site.css')}}" />
     <title>{% block title %}Home{% endblock %}</title>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="/">  <!-- if click on icon then return to home page -->
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo"> <!-- Add the logo image here -->
+      </a>
       <button
         class="navbar-toggler"
         type="button"
@@ -30,11 +41,45 @@
       <div class="collapse navbar-collapse" id="navbar">
         <div class="navbar-nav">
           {% if user.is_authenticated %}
-          <a class="nav-item nav-link" id="home" href="/">Home</a>
-          <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
+            <a class="nav-item nav-link" id="home" href="/">Home</a>
+            <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
+            <!-- Add this part to display the user's first name -->
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {{ user.first_name }}
+              </a>
+              <div class="dropdown-menu" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="/display_user/" onclick=
+                "location.href=this.href+currentuserid;return false;">My Profile</a>
+                <a class="dropdown-item" href="/update_user">My Account</a>
+                <a class="dropdown-item" href="/user_proficiencies">My Proficiency</a>
+                <a class="dropdown-item" href="/proficiency_spider/" onclick=
+                "location.href=this.href+currentuserid;return false;">My Radar Chart</a>
+                <a class="dropdown-item" href="/qualifications">My Qualifications</a>
+              </div>
+            </div>
+            <!-- End of user's first name display -->
+            <!-- Add this part to display directories -->
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="directoryDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Directories
+              </a>
+              <div class="dropdown-menu" aria-labelledby="directoryDropdown">
+                <a class="dropdown-item" href="/locations">Locations Directory</a>
+                <a class="dropdown-item" href="/skills_directory">Skills Directory</a>
+                <a class="dropdown-item" href="/people">People Directory</a>
+                <a class="dropdown-item" href="/skills">Skills</a>
+                <a class="dropdown-item" href="/continents">Continents</a>
+                <a class="dropdown-item" href="/countries">Countries</a>
+                <a class="dropdown-item" href="/cities">Cities</a>
+                <!-- Add other directories -related links if needed -->
+              </div>
+            </div>
+            <a class="nav-item nav-link" id="proficiencies" href="/proficiencies">Proficiencies</a>
+            <a class="nav-item nav-link" id="peolple_finder" href="/people_finder">People Finder</a>
           {% else %}
-          <a class="nav-item nav-link" id="login" href="/login">Login</a>
-          <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>
+            <a class="nav-item nav-link" id="login" href="/login">Login</a>
+            <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>
           {% endif %}
         </div>
       </div>
@@ -74,6 +119,7 @@
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
       crossorigin="anonymous"
     ></script>
+    <style>h1 {text-align: center;}</style>
 
 {% block javascript %}
     <script type="text/javascript">
@@ -85,6 +131,11 @@
     window.location.href = "/";
   });
   }
+</script>
+<script>
+  $(document).ready(function () {
+    $('[data-toggle="dropdown"]').dropdown();
+  });
 </script>
 {% endblock %}
   </body>

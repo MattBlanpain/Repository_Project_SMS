@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+    skills
+{% endblock %}
+
+{% block content
+    %}
+    <h1 align="center">Skills</h1>
+  <ul class="list-group list-group-flush" id="skills">
+    {% for a_skill in list_skills %}
+    <li class="list-group-item">
+      {{ a_skill.skill_name }}
+      <br>
+      {{ a_skill.skill_description }}
+    </li>
+    {% endfor %}
+      
+   
+    
+  </ul>
+    {% endblock %}

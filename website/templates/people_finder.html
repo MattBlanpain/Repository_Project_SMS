@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}
+  People_Finder
+{% endblock %}
+
+{% block content %}
+
+    <h1>People Finder</h1>
+    <form method="post">
+        <label for="skill">Select Skill:</label>
+        <select name="skill" id="skill">
+            {% for skill in skills %}
+                <option value="{{ skill.skill_id }}" {% if skill.skill_id == selected_skill %} selected {% endif %}>
+                    {{ skill.skill_name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label for="min_proficiency">Minimum Proficiency:</label>
+        <select name="min_proficiency" id="min_proficiency">
+            {% for level in range(6) %}
+                <option value="{{ level }}" {% if level == selected_min_proficiency %} selected {% endif %}>
+                    {{ level }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Find</button>
+    </form>
+
+    {% if users %}
+        <h2>Matching Users:</h2>
+        <ul>
+            {% for user in users %}
+                <li>
+                    {{ user.first_name }} {{ user.last_name }} - from city: {{ get_city_name_from_user(user.from_city_id) }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

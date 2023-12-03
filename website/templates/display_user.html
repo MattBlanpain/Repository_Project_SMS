@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Display_User
+{% endblock %}
+
+{% block content %}
+    <h1 align="center">{{ selected_user.first_name }} {{ selected_user.last_name }}</h1>
+            <strong>Email / Login: </strong>{{ selected_user.email }}
+            <br>
+            <strong>First Name: </strong>{{ selected_user.first_name }}
+            <br>
+            <strong>Last Name: </strong>{{ selected_user.last_name }}
+            <br>
+            <strong>From City: </strong>{{ get_city_name_from_user(selected_user.from_city_id) }}
+            <br>
+            <br>
+            <a href="/proficiency_spider/" onclick=
+            "location.href=this.href+selecteduserid;return false;"><img src="{{ url_for('static', filename='radar_chart.png') }}" alt="Radar_Chart"> go to radar chart</a>
+            <br>
+        <h2>top categories</h2>
+            coming soon...
+        <br>
+        <h2>top skills</h2>
+        <ul>
+            {% for skill, proficiency in selected_user.get_top_skills() %}
+                <li>
+                    {% if proficiency == "FIVE" %}<span style = "background-color:#0DE0FF">&nbsp;5&nbsp;</span>{% endif %}
+                    {% if proficiency == "FOUR" %}<span style = "background-color:#0CA4EB">{{ proficiency }}</span>{% endif %}
+                    {% if proficiency == "THREE" %}<span style = "background-color:#007DFF">{{ proficiency }}</span>{% endif %}
+                    {% if proficiency == "TWO" %}<span style = "background-color:#0A37A6">{{ proficiency }}</span>{% endif %}
+                    {% if proficiency == "ONE" %}<span style = "background-color:#05106E">{{ proficiency }}</span>{% endif %}
+                    {% if proficiency == "ZERO" %}<span style = "background-color:#000">{{ proficiency }}</span>{% endif %}
+                    &nbsp;-&nbsp;{{ skill.skill_name }}
+                </li>
+            {% endfor %}
+        </ul>
+        <h2>top qualifications</h2>
+            coming soon...
+        <br>
+    <script>
+        var selecteduserid = {{ selected_user.id }};
+    </script>
+        
+{% endblock %}

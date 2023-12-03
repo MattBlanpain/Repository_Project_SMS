@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Cities
+{% endblock %}
+
+{% block content %}
+    <h1>User Qualifications</h1>
+
+    <h2>Current Qualifications</h2>
+    <ul>
+        {% for qualification in user.qualifications %}
+            <li>
+                <strong>{{ qualification.qualification_name }}</strong><br>
+                Status: {{ qualification.qualification_status }}<br>
+                Description: {{ qualification.qualification_description }}<br>
+                Start Date: {{ qualification.qualification_start_date }}<br>
+                End Date: {{ qualification.qualification_end_date }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Add New Qualification</h2>
+    <form method="post" action="{{ url_for('views.user_qualifications') }}">
+        <!-- Add form fields for new qualification here -->
+        <label for="qualification_name">Qualification Name:</label>
+        <input type="text" id="qualification_name" name="qualification_name" required><br>
+
+        <!-- Add other fields as needed -->
+
+        <input type="submit" value="Add Qualification">
+    </form>
+
+    <h2>Edit Qualification</h2>
+    <form method="post" action="{{ url_for('views.user_qualifications') }}">
+        <!-- Add form fields for editing qualification here -->
+        <label for="qualification_id">Qualification ID:</label>
+        <input type="text" id="qualification_id" name="qualification_id" required><br>
+
+        <!-- Add other fields as needed -->
+
+        <input type="submit" value="Edit Qualification">
+    </form>
+{% endblock %}

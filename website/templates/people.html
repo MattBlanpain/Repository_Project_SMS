@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+    People
+{% endblock %}
+
+{% block content %}
+<h1 align="center">People Directory</h1>
+<h2>{{ users|length }} registered users</h2>
+<br>
+    <ul class="list-group list-group-flush" id="users">
+        {% for user in users %}
+            <li class="list-group-item">
+                {{ user.first_name }} , {{ user.last_name }} <a href="{{ url_for('views.display_user', user_id=user.id) }}"> go to user profile</a>
+                <div>
+                    from city: {{ get_city_name_from_user(user.from_city_id) }}
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    <!-- You can add forms or links to add new users or perform other actions -->
+{% endblock %}

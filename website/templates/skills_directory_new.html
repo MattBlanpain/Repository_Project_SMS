@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Skills_Directory
+{% endblock %}
+
+{% block content %}
+
+  <style>
+    /* Add your CSS styles for the tree view here */
+    .tree {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .tree-node {
+      margin: 10px 0;
+    }
+
+    .tree-node-collapsed .tree-children {
+      display: none;
+    }
+
+    .tree-node-toggle {
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    /* Add style for the icons */
+    .tree-node.skill:before {
+      content: '\2605'; /* Unicode for BLACK STAR */
+      margin-right: 5px;
+    }
+
+    .tree-node.group:before {
+      content: '\1F4C1'; /* Unicode for FILE FOLDER */
+      margin-right: 5px;
+    }
+
+    .tree-node.category:before {
+      content: '\1F4BC'; /* Unicode for BRIEFCASE */
+      margin-right: 5px;
+    }
+
+    .tree-node.area:before {
+      content: '\1F3E2'; /* Unicode for OFFICE BUILDING */
+      margin-right: 5px;
+    }
+
+    .tree-node-toggle:before {
+      content: '\25B6'; /* Unicode for BLACK RIGHT-POINTING TRIANGLE */
+      margin-right: 5px;
+    }
+  </style>
+
+  <h1>Skills Directory</h1>
+
+  <ul class="tree">
+    <li>
+      <span></span>
+      <b>Skills Directory</b>
+      <ul class="tree-children">
+        {% for area in areas %}
+          <li class="tree-node area">
+            <span class="tree-node-toggle area" onclick="toggleNode(this)"></span>
+            {{ area.area_name }}
+            {% if area.child_categories %}
+              <ul class="tree-children">
+                {% for category in area.child_categories %}
+                  <li class="tree-node category">
+                    <span class="tree-node-toggle category" onclick="toggleNode(this)"></span>
+                    {{ category.category_name }}
+                    {% if category.child_groups %}
+                      <ul class="tree-children">
+                        {% for group in category.child_groups %}
+                          <li class="tree-node group">
+                            <span class="tree-node-toggle group" onclick="toggleNode(this)"></span>
+                            {{ group.group_name }}
+                            {% if group.child_skills %}
+                              <ul class="tree-children">
+                                {% for skill in group.child_skills %}
+                                  <li class="tree-node skill">{{ skill.skill_name }}</li>
+                                {% endfor %}
+                              </ul>
+                            {% endif %}
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </li>
+  </ul>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Set the initial state of the toggle icons
+      var toggles = document.querySelectorAll('.tree-node-toggle');
+      toggles.forEach(function (toggle) {
+        setToggleIcon(toggle);
+      });
+  
+      // Add event listeners for toggling nodes
+      toggles.forEach(function (toggle) {
+        toggle.addEventListener('click', function () {
+          var node = toggle.parentElement;
+          var children = node.querySelector('.tree-children');
+          var isCollapsed = children.style.display === 'none';
+          children.style.display = isCollapsed ? 'block' : 'none';
+          setToggleIcon(toggle);
+        });
+      });
+    });
+  
+    function setToggleIcon(toggle) {
+      var node = toggle.parentElement;
+      var children = node.querySelector('.tree-children');
+      var isCollapsed = children.style.display === 'none';
+      toggle.innerHTML = isCollapsed ? '&#x25B6;' : '&#x25BC;';
+    }
+  </script>
+  
+
+{% endblock %}

@@ -1,0 +1,90 @@
+  {% extends "base.html" %}
+
+  {% block title %}
+    Locations_Directory
+  {% endblock %}
+  
+  {% block content %}
+
+    <style>
+      /* Add your CSS styles for the tree view here */
+      .tree {
+        list-style-type: none;
+        padding: 0;
+      }
+  
+      .tree-node {
+        margin: 10px 0;
+      }
+  
+      .tree-node-collapsed .tree-children {
+        display: none;
+      }
+  
+      .tree-node-toggle {
+        cursor: pointer;
+        margin-right: 5px;
+      }
+    </style>
+    <h1>Locations Directory</h1>
+    <br>
+    <a href="{{ url_for('views.view_continents') }}" class="btn btn-info">{{ continents|length }}</a> &#x1F30D; continents, <a href="{{ url_for('views.view_countries') }}" class="btn btn-info">{{ countries|length }}</a> &#x1F3F4; countries, <a href="{{ url_for('views.view_cities') }}" class="btn btn-info">{{ cities|length }}</a> &#x1F3F0; cities
+    <br>
+    <br>
+    
+    <ul class="tree">
+      <li class="tree-node">
+        <span class="tree-node-toggle" onclick="toggleNode(this)">&#x25B6;</span>
+        Locations Directory
+        <ul class="tree-children" style="list-style-type:'\&#x1F30D;'">
+          {% for continent in continents %}
+            <li class="tree-node">
+              <span class="tree-node-toggle" onclick="toggleNode(this)">&#x25B6;</span>
+              {{ continent.continent_name }}
+              <ul class="tree-children" style="list-style-type:'\&#x1F3F4;'">
+                {% for country in continent.child_countries %}
+                  <li class="tree-node">
+                    <span class="tree-node-toggle" onclick="toggleNode(this)">&#x25B6;</span>
+                    {{ country.country_name }}
+                    <ul class="tree-children" style="list-style-type:'\&#x1F3F0;'">
+                      {% for city in country.child_cities %}
+                        <li class="tree-node">{{ city.city_name }}</li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                {% endfor %}
+              </ul>
+            </li>
+          {% endfor %}
+        </ul>
+      </li>
+    </ul>
+  
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Set the initial state of the toggle icons
+        var toggles = document.querySelectorAll('.tree-node-toggle');
+        toggles.forEach(function (toggle) {
+          setToggleIcon(toggle);
+        });
+    
+        // Add event listeners for toggling nodes
+        toggles.forEach(function (toggle) {
+          toggle.addEventListener('click', function () {
+            var node = toggle.parentElement;
+            var children = node.querySelector('.tree-children');
+            var isCollapsed = children.style.display === 'none';
+            children.style.display = isCollapsed ? 'block' : 'none';
+            setToggleIcon(toggle);
+          });
+        });
+      });
+    
+      function setToggleIcon(toggle) {
+        var node = toggle.parentElement;
+        var children = node.querySelector('.tree-children');
+        var isCollapsed = children.style.display === 'none';
+        toggle.innerHTML = isCollapsed ? '&#x25B6;' : '&#x25BC;';
+      }
+    </script>
+  {% endblock %}

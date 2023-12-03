@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}
+    ProficiencySpider
+{% endblock %}
+
+{% block content %}
+
+
+    <h1>Proficiency Radar Graph for {{ selected_user.first_name }}</h1>
+    <canvas id="proficiencySpider"></canvas>
+    <script>
+        var ctx = document.getElementById('proficiencySpider').getContext('2d');
+
+        var data = {
+            labels: [
+                {% for skill in list_skills %}
+                "{{ skill.skill_name }}",
+                {% endfor %}
+            ],
+            datasets: [{
+                label: 'Proficiency Level',
+                data: [
+                    {% for skill in list_skills %}
+                    {{ proficiency_levels[skill.skill_id] }},
+                    {% endfor %}
+                ],
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        var options = {
+            scale: {
+                ticks: {
+                    beginAtZero: true,
+                    max: 5,
+                    stepSize: 1
+                }
+            }
+        };
+
+        var myRadarChart = new Chart(ctx, {
+            type: 'radar',
+            data: data,
+            options: options
+        });
+    </script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+{% endblock %}
