@@ -254,17 +254,22 @@ def display_skills_directory():
 @views.route('/people_finder', methods=['GET', 'POST'])
 def people_finder():
     skills = Skill.query.all()
-    selected_skill = request.form.get('skill') if request.method == 'POST' else None
-    selected_min_proficiency = request.form.get('min_proficiency') if request.method == 'POST' else None
     cities = {city.city_id: city.city_name for city in City.query.all()}
     # Define the function within the route handler
     def get_city_name_from_user(id):
         return cities.get(id)
+    def get_proficiency_for_skill_from_user(id):
+        return cities.get(id)
 
     if request.method == 'POST':
-        skill_id = request.form.get('skill')
-        min_proficiency = request.form.get('min_proficiency')
-        min_proficiency = int(min_proficiency)
+        skill_id_1 = request.form.get('skill1')
+        skill_id_1 = int(skill_id_1)
+        min_proficiency_1 = request.form.get('min_proficiency1')
+        min_proficiency_1 = int(min_proficiency_1)
+        skill_id_2 = request.form.get('skill2')
+        skill_id_2 = int(skill_id_2)
+        min_proficiency_2 = request.form.get('min_proficiency2')
+        min_proficiency_2 = int(min_proficiency_2)
 
         level_mapping = {
             5: [ProficiencyLevel.FIVE],
@@ -275,21 +280,50 @@ def people_finder():
             0: [ProficiencyLevel.ZERO, ProficiencyLevel.ONE, ProficiencyLevel.TWO, ProficiencyLevel.THREE, ProficiencyLevel.FOUR, ProficiencyLevel.FIVE],
         }
 
-        allowed_levels = level_mapping.get(min_proficiency, [])
+        allowed_levels_1 = level_mapping.get(min_proficiency_1, [])
+        allowed_levels_2 = level_mapping.get(min_proficiency_2, [])
 
-        matching_users = User.query.join(Assessment).filter(
-            Assessment.for_skill == skill_id,
-            Assessment.proficiency_level.in_(allowed_levels)
+        query_filters = []
+        query_filters.append(
+                db.and_(
+                    Assessment.for_skill == skill_id_1,
+                    Assessment.proficiency_level.in_(allowed_levels_1)
+                )
+            )
+        query_filters.append(
+                db.and_(
+                    Assessment.for_skill == skill_id_2,
+                    Assessment.proficiency_level.in_(allowed_levels_2)
+                )
+            )
+        base_query = User.query.join(Assessment)
+        for query_filter in query_filters:
+                base_query = base_query.filter(query_filter)
+        matching_users = base_query.all()
+
+        matching_users_1 = User.query.join(Assessment).filter(
+            Assessment.for_skill == skill_id_1,
+            Assessment.proficiency_level.in_(allowed_levels_1),
         ).all()
-        print(allowed_levels)
-        print(User.query.join(Assessment).filter(
-    Assessment.for_skill == skill_id,
-    Assessment.proficiency_level.in_(allowed_levels)
-        ))
+        matching_users_2 = User.query.join(Assessment).filter(
+            Assessment.for_skill == skill_id_2,
+            Assessment.proficiency_level.in_(allowed_levels_2),
+        ).all()
 
+        # Extract user IDs from each list
+        user_ids_1 = {user.id for user in matching_users_1}
+        user_ids_2 = {user.id for user in matching_users_2}
 
-        return render_template('people_finder.html', skills=skills, users=matching_users, user=current_user,
-                               selected_skill=selected_skill, selected_min_proficiency=selected_min_proficiency, get_city_name_from_user=get_city_name_from_user)
+        # Find the intersection of user IDs
+        common_user_ids = user_ids_1.intersection(user_ids_2)
+
+        # Build a new list of users that have common IDs
+        common_users = [user for user in matching_users_1 if user.id in common_user_ids]
+
+        # 'common_users' now contains the users that are present in both lists based on their IDs
+
+        return render_template('people_finder.html', skills=skills, users=common_users, user=current_user,
+                               selected_skill_1=skill_id_1, selected_min_proficiency_1=min_proficiency_1, selected_skill_2=skill_id_2, selected_min_proficiency_2=min_proficiency_2, get_city_name_from_user=get_city_name_from_user)
 
     return render_template('people_finder.html', skills=skills, user=current_user)
 

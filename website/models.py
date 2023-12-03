@@ -54,6 +54,11 @@ class User(db.Model, UserMixin): ## a class must have Uppercase as first letter
         # Create a list of tuples with skill and proficiency
         result = [(assessment.skill, assessment.proficiency_level.name) for assessment in top_skills]
         return result
+    def proficiency_for_skill(self, skill_id):
+        assessment = Assessment.query.filter_by(for_user=self.id, for_skill=skill_id).first()
+        if assessment:
+            return assessment.proficiency_level.value  # Assuming proficiency_level is an Enum
+        return 0  # Or handle the case where there's no assessment for the user and skill
     
 class SkillArea(db.Model):
     __tablename__ = 'table_areas'
@@ -84,6 +89,12 @@ class Skill(db.Model):
     skill_name = db.Column(db.String(150), unique=True)
     parent_group = db.Column(db.Integer, db.ForeignKey('table_groups.group_id'))
     assessed_by = db.relationship('Assessment', backref='skill')  # added backref
+    def get_skill_name(skill_id):
+        skill = Skill.query.filter_by(skill_id=skill_id).first()
+        if skill:
+            return skill.skill_name
+        else:
+            return None  # Skill ID not found
 
 class Assessment(db.Model):
     __tablename__ = 'table_assessments'

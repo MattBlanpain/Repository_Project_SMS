@@ -26,11 +26,11 @@
             {% for skill, proficiency in selected_user.get_top_skills() %}
                 <li>
                     {% if proficiency == "FIVE" %}<span style = "background-color:#0DE0FF">&nbsp;5&nbsp;</span>{% endif %}
-                    {% if proficiency == "FOUR" %}<span style = "background-color:#0CA4EB">{{ proficiency }}</span>{% endif %}
-                    {% if proficiency == "THREE" %}<span style = "background-color:#007DFF">{{ proficiency }}</span>{% endif %}
-                    {% if proficiency == "TWO" %}<span style = "background-color:#0A37A6">{{ proficiency }}</span>{% endif %}
-                    {% if proficiency == "ONE" %}<span style = "background-color:#05106E">{{ proficiency }}</span>{% endif %}
-                    {% if proficiency == "ZERO" %}<span style = "background-color:#000">{{ proficiency }}</span>{% endif %}
+                    {% if proficiency == "FOUR" %}<span style = "background-color:#0CA4EB">&nbsp;4&nbsp;</span>{% endif %}
+                    {% if proficiency == "THREE" %}<span style = "background-color:#007DFF">&nbsp;3&nbsp;</span>{% endif %}
+                    {% if proficiency == "TWO" %}<span style = "background-color:#0A37A6">&nbsp;2&nbsp;</span>{% endif %}
+                    {% if proficiency == "ONE" %}<span style = "background-color:#05106E">&nbsp;1&nbsp;</span>{% endif %}
+                    {% if proficiency == "ZERO" %}<span style = "background-color:#000">&nbsp;0&nbsp;</span>{% endif %}
                     &nbsp;-&nbsp;{{ skill.skill_name }}
                 </li>
             {% endfor %}
