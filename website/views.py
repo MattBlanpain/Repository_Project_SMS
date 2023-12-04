@@ -87,28 +87,34 @@ def view_users():
 
     return render_template('people.html', get_city_name_from_user=get_city_name_from_user, users=users, user=current_user)
 
+
 @views.route('/proficiencies', methods=['GET'])
 @login_required
 def display_proficiency_matrix():
-    
-    # Get all users and skills
     list_all_users = User.query.all()
-    #list_all_skills = Skill.query.all()
-    #selected_group_id = 1  # Replace this with the group_id you want to filter by
-    selected_group = SkillGroup.query.filter_by(default_group=True).first()
-    if selected_group:
-        selected_group_id = selected_group.group_id
-    else:
-        # Handle the case where no SkillGroup has default_group set to True
-        selected_group_id = 2  # You can choose an appropriate default value or error handling strategy
+    list_all_skills = Skill.query.all()
 
-    list_all_skills = Skill.query.filter_by(parent_group=selected_group_id).all()
+    # Fetch available groups for dropdown
+    available_groups = SkillGroup.query.all()
 
+    # Fetch available categories for dropdown
+    available_categories = SkillCategory.query.all()
 
-    # Create an empty matrix with users IDs as rows and skills IDs as columns
+    selected_group_id = request.args.get('group')  # Get the selected group from URL parameters
+    selected_category_id = request.args.get('category')  # Get the selected category from URL parameters
+
+    if selected_group_id and selected_group_id != "all":
+        # Filter skills by selected group
+        list_all_skills = Skill.query.filter_by(parent_group=selected_group_id).all()
+
+    if selected_category_id and selected_category_id != "all":
+        # Filter skills by selected category (fetching all groups in the category)
+        groups_in_category = SkillGroup.query.filter_by(parent_category=selected_category_id).all()
+        group_ids_in_category = [group.group_id for group in groups_in_category]
+        list_all_skills = Skill.query.filter(Skill.parent_group.in_(group_ids_in_category)).all()
+
     proficiency_matrix = pd.DataFrame(0, index=[a_user.id for a_user in list_all_users], columns=[a_skill.skill_id for a_skill in list_all_skills])
 
-    # Fill in the matrix with proficiency values
     list_all_assessments = Assessment.query.all()
     for an_assessment in list_all_assessments:
         for_user = an_assessment.for_user
@@ -116,7 +122,7 @@ def display_proficiency_matrix():
         proficiency = int(an_assessment.proficiency_level.value)
         proficiency_matrix.at[for_user, for_skill] = proficiency
 
-    return render_template('proficiencies.html', list_all_skills=list_all_skills, list_all_users=list_all_users, matrix=proficiency_matrix, user=current_user)
+    return render_template('proficiencies.html', list_all_skills=list_all_skills, list_all_users=list_all_users, matrix=proficiency_matrix, user=current_user, available_groups=available_groups, available_categories=available_categories, selected_group_id=selected_group_id, selected_category_id=selected_category_id)
 
 @views.route('/init-10-users', methods=['GET'])
 def create10users():

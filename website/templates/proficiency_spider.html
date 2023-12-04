@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
 {% block title %}
-    ProficiencySpider
+    Proficiency_Spider
 {% endblock %}
 
 {% block content %}
 
 
-    <h1>Proficiency Radar Graph for {{ selected_user.first_name }}</h1>
+    <h1>Proficiency Radar Graph for {{ selected_user.first_name }} {{ selected_user.last_name }}</h1>
     <canvas id="proficiencySpider"></canvas>
     <script>
         var ctx = document.getElementById('proficiencySpider').getContext('2d');

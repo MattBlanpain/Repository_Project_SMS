@@ -1,42 +1,85 @@
 {% extends "base.html" %}
 
 {% block title %}
-    ProficiencyMatrix
+    Proficiency_Matrix
 {% endblock %}
-
 
 {% block content %}
 <h1 align="center">Proficiency Matrix</h1>
-    <table id="proficiencyMatrix" class="display">
-        <thead>
+<br>
+<div>
+    <button onclick="showOnlyGroup()">Show Only Group:</button>
+    <select id="groupFilter">
+        <option value="all">All Groups</option>
+        <!-- Options will be dynamically populated with available groups -->
+        {% for group in available_groups %}
+            <option value="{{ group.group_id }}" {% if selected_group_id == group.group_id %} selected {% endif %}>{{ group.group_name }}</option>
+        {% endfor %}
+    </select>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <button onclick="showOnlyCategory()">Show Only Category:</button>
+    <select id="categoryFilter">
+        <option value="all">All Categories</option>
+        <!-- Options will be dynamically populated with available categories -->
+        {% for category in available_categories %}
+            <option value="{{ category.category_id }}" {% if selected_category_id == category.category_id %} selected {% endif %}>{{ category.category_name }}</option>
+        {% endfor %}
+    </select>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <button onclick="showAllSkills()">Show All Skills</button>
+</div>
+<br>
+<table id="proficiencyMatrix" class="display">
+    <thead>
+        <tr>
+            <th>User</th>
+            <!-- Loop through the skills to create columns -->
+            {% for a_skill in list_all_skills %}
+                <th>{{ a_skill.skill_name }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Loop through the users to create rows -->
+        {% for a_user in list_all_users %}
             <tr>
-                <th>User</th>
-                <!-- Loop through the skills to create columns -->
+                <td>{{ a_user.first_name }} {{ a_user.last_name }}</td>
+                <!-- Loop through the skills to populate proficiency values -->
                 {% for a_skill in list_all_skills %}
-                    <th>{{ a_skill.skill_name }}</th>
+                    <td data-value="{{ matrix.at[a_user.id,a_skill.skill_id] }}">{{ matrix.at[a_user.id,a_skill.skill_id] }}</td>
                 {% endfor %}
             </tr>
-        </thead>
-        <tbody>
-            <!-- Loop through the users to create rows -->
-            {% for a_user in list_all_users %}
-                <tr>
-                    <td>{{ a_user.first_name }}</td>
-                    <!-- Loop through the skills to populate proficiency values -->
-                    {% for a_skill in list_all_skills %}
-                        <td data-value="{{ matrix.at[a_user.id,a_skill.skill_id] }}">{{ matrix.at[a_user.id,a_skill.skill_id] }}</td>
-                    {% endfor %}
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.11.6/js/jquery.dataTables.min.js"></script>
-    <script>
-        // Initialize DataTables
-        $(document).ready(function () {
-            $('#proficiencyMatrix').DataTable();
-        });
-    </script>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.6/js/jquery.dataTables.min.js"></script>
+<script>
+    function showOnlyGroup() {
+        var selectedGroup = document.getElementById("groupFilter").value;
+        if (selectedGroup !== "all") {
+            // Reload the page with the selected group filter
+            window.location.href = "/proficiencies?group=" + selectedGroup;
+        }
+    }
+
+    function showAllSkills() {
+        // Reload the page to show all skills
+        window.location.href = "/proficiencies";
+    }
+
+    // Initialize DataTables
+    $(document).ready(function () {
+        $('#proficiencyMatrix').DataTable();
+    });
+
+    function showOnlyCategory() {
+        var selectedCategory = document.getElementById("categoryFilter").value;
+        if (selectedCategory !== "all") {
+            // Reload the page with the selected category filter
+            window.location.href = "/proficiencies?category=" + selectedCategory;
+        }
+    }
+</script>
 {% endblock %}
