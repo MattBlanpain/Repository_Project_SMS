@@ -5,24 +5,44 @@
 {% endblock %}
 
 {% block content %}
-
-
-    <h1>Proficiency Radar Graph for {{ selected_user.first_name }} {{ selected_user.last_name }}</h1>
-    <canvas id="proficiencySpider"></canvas>
-    <script>
+<h1>Proficiency Radar Chart for {{ selected_user.first_name }} {{ selected_user.last_name }}</h1>
+<br>
+<form method="POST" action="">
+    <label for="group_filter">Filter by Group:</label>
+    <select name="group_filter" id="group_filter">
+        <option value="all">Show All Groups</option>
+        {% for group in groups %}
+            <option value="{{ group.group_id }}">{{ group.group_name }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Apply Group Filter</button>
+</form>
+<form method="POST" action="">
+    <label for="category_filter">Filter by Category:</label>
+    <select name="category_filter" id="category_filter">
+        <option value="all">Show All Categories</option>
+        {% for category in categories %}
+            <option value="{{ category.category_id }}">{{ category.category_name }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Apply Category Filter</button>
+    <a href="{{ url_for('views.proficiency_spider', user_id=selected_user.id) }}">Reset Filters</a>
+</form>
+<br>
+<canvas id="proficiencySpider"></canvas>    <script>
         var ctx = document.getElementById('proficiencySpider').getContext('2d');
 
         var data = {
             labels: [
-                {% for skill in list_skills %}
-                "{{ skill.skill_name }}",
+                {% for skill in filtered_skills %}
+                    "{{ skill.skill_name }}",
                 {% endfor %}
             ],
             datasets: [{
                 label: 'Proficiency Level',
                 data: [
-                    {% for skill in list_skills %}
-                    {{ proficiency_levels[skill.skill_id] }},
+                    {% for skill in filtered_skills %}
+                        {{ proficiency_levels[skill.skill_id] }},
                     {% endfor %}
                 ],
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -47,8 +67,5 @@
             options: options
         });
     </script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock %}

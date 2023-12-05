@@ -159,23 +159,43 @@ def user_proficiencies():
     return render_template('user_proficiencies.html', user=current_user, list_skills=list_skills, proficiency_levels=proficiency_levels, proficiency_counts=proficiency_counts)
 
 @views.route('/proficiency_spider/<int:user_id>', methods=['GET', 'POST'])
-@login_required  # Make sure the user is logged in to access this page
+@login_required
 def proficiency_spider(user_id):
     selected_user = User.query.get_or_404(user_id)
-    if request.method == 'POST':
-        # Handle the form submission and update proficiency levels
-        for skill_id in request.form:
-            proficiency_level = request.form[skill_id]
-            assessment = Assessment.query.filter_by(for_skill=skill_id, for_user=selected_user.id).first()
-            if assessment:
-                assessment.proficiency_level = ProficiencyLevel(int(proficiency_level))
-                db.session.commit()
-    
-    list_skills = Skill.query.all()
-    assessments = Assessment.query.filter_by(for_user=selected_user.id).all()
-    proficiency_levels = {assessment.for_skill: assessment.proficiency_level.value for assessment in assessments}
 
-    return render_template('proficiency_spider.html', user=current_user, list_skills=list_skills, proficiency_levels=proficiency_levels, selected_user=selected_user)
+    # Fetch all groups for the dropdown list
+    groups = SkillGroup.query.all()
+
+    # Fetch all categories for the dropdown list
+    categories = SkillCategory.query.all()
+
+    # Fetch all skills for the radar chart
+    list_skills = Skill.query.all()
+
+    if request.method == 'POST':
+        # Handle filter by group
+        group_filter = request.form.get('group_filter')
+        if group_filter and group_filter != 'all':
+            filtered_skills = Skill.query.filter_by(parent_group=group_filter).all()
+        else:
+            filtered_skills = list_skills
+
+        # Handle filter by category
+        category_filter = request.form.get('category_filter')
+        if category_filter and category_filter != 'all':
+            groups_in_category = SkillGroup.query.filter_by(parent_category=category_filter).all()
+            group_ids_in_category = [group.group_id for group in groups_in_category]
+            filtered_skills = [skill for skill in filtered_skills if skill.parent_group in group_ids_in_category]
+
+    else:
+        # When first loading the page or resetting filters
+        filtered_skills = list_skills
+
+    # Fetch proficiency levels based on the filtered skills for the selected user
+    assessments = Assessment.query.filter_by(for_user=selected_user.id).all()
+    proficiency_levels = {assessment.for_skill: assessment.proficiency_level.value for assessment in assessments if assessment.for_skill in [skill.skill_id for skill in filtered_skills]}
+
+    return render_template('proficiency_spider.html', user=current_user, list_skills=list_skills, filtered_skills=filtered_skills, proficiency_levels=proficiency_levels, selected_user=selected_user, groups=groups, categories=categories)
 
 @views.route('/delete_city/<int:city_id>', methods=['POST'])
 @login_required
