@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Sunburst
+{% endblock %}
+
+{% block content %}
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <body>
+        <h1 align="center">Sunburst Chart</h1>
+        <br>
+        <pre>
+            This sunburst chart displays all skills where there are users who have at least the selected minimum proficiency.
+            Click on an inner circle to filter the chart.
+        </pre>
+        Minimum Proficiency (0-5): 
+        <input type="range" min="0" max="5" value="{{ selected_min_prof | default(2) }}" step="1" id="proficiencySlider">
+        <output for="proficiencySlider" id="sliderValue">{{ selected_min_prof }} - 
+          {% if selected_min_prof == 0 %}Not Registered{% endif %}
+          {% if selected_min_prof == 1 %}No Awareness{% endif %}
+          {% if selected_min_prof == 2 %}Beginner / Learn{% endif %}
+          {% if selected_min_prof == 3 %}Intermediate / Deliver{% endif %}
+          {% if selected_min_prof == 4 %}Advanced / Perform{% endif %}
+          {% if selected_min_prof == 5 %}Expert / Coach{% endif %}
+        </output>
+        <br>
+        <div id='chart' class='chart'></div>
+        <br>
+    </body>
+
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    <script type='text/javascript'>
+      var slider = document.getElementById('proficiencySlider');
+      var output = document.getElementById('sliderValue');
+      
+      slider.oninput = function() {
+          output.innerHTML = slider.value;
+      };
+  
+      slider.onchange = function() {
+          var selected_min_prof = slider.value;
+          window.location.href = '/sunburst?selected_min_prof=' + selected_min_prof;
+      };
+  
+      var graphs = {{ graphJSON | safe }};
+      Plotly.plot('chart', graphs, {});
+  </script>{% endblock %}

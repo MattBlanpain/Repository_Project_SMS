@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}
+    sunburst_chart
+{% endblock %}
+
+{% block content
+    %}
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<body>
+    <h1 align="center">Sunburst Chart</h1>
+    <br>
+    <form action="{{ url_for('views.sunburst_chart') }}" method="post">
+        <input type="radio" name="selected_proficiency" value="2" {% if selected_proficiency == 2 %}checked{% endif %}> 2-Beginner / Learn
+        <br>
+        <input type="radio" name="selected_proficiency" value="3" {% if selected_proficiency == 3 %}checked{% endif %}> 3-Intermediate / Deliver
+        <br>
+        <input type="radio" name="selected_proficiency" value="4" {% if selected_proficiency == 4 %}checked{% endif %}> 4-Advanced / Perform
+        <br>
+        <input type="radio" name="selected_proficiency" value="5" {% if selected_proficiency == 5 %}checked{% endif %}> 5-Expert / Coach
+        <br>
+        <input type="submit" value="Update Chart">
+    </form>
+
+<form action="{{ url_for('views.sunburst_chart') }}" method="post">
+    <label for="group">Select a Group:</label>
+    <select name="group" id="group">
+        <option value="">All Groups</option>
+        {% for group in skill_groups %}
+            <option value="{{ group.group_id }}">{{ group.group_name }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Apply Group Filter">
+</form>
+
+    <div id="sunburstChart"></div>
+
+    <script>
+        var chart_fig = {{ chart_fig.to_json() }};
+        Plotly.newPlot('sunburstChart', chart_fig.data, chart_fig.layout);
+    </script>
+    {% endblock %}

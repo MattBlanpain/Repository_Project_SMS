@@ -1,9 +1,11 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User, ProfileType, City, Country, Continent
+from .models import User, ProfileType, City, Country, Continent, Skill, Assessment, ProficiencyLevel
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db   ##means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
 from passlib.hash import scrypt
+import random
+
 
 auth = Blueprint('auth', __name__)
 
@@ -57,9 +59,7 @@ def sign_up():
         print(f"city.city_id: {city.city_id}")
         print(f"city.city_name: {city.city_name}")
         country = Country.query.filter_by(country_id=city.parent_country_id).first()
-        print(f"country.country_name: {country.country_name}")
         continent = Continent.query.filter_by(continent_id=country.parent_continent_id).first()
-        print(f"country.parent_continent_name: {continent.continent_name}")
 
         #try:
         #    profile_enum = ProfileType[ProfileType.EMPLOYEE]
@@ -87,6 +87,14 @@ def sign_up():
 
             db.session.add(new_user)
             db.session.commit()
+
+            # Initialize all assessment to 0 for all skills
+            list_skills = Skill.query.all()
+            for skill in list_skills:
+                new_assessment = Assessment(for_skill=skill.skill_id, for_user=new_user.id, proficiency_level=ProficiencyLevel.ZERO)
+                db.session.add(new_assessment)
+                db.session.commit()
+
             login_user(new_user, remember=True)
             flash('Account created!', category='success')
             return redirect(url_for('views.home'))

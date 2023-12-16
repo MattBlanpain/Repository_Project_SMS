@@ -24,6 +24,35 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='site.css')}}" />
     <title>{% block title %}Home{% endblock %}</title>
+    <style>
+      .bubble {
+          width: 50px; /* Default width */
+          height: 50px; /* Default height */
+          background-color: #3498db;
+          border-radius: 50%;
+          display: inline-block;
+          margin: 5px;
+          position: relative;
+          cursor: pointer;
+      }
+      .tooltiptext {
+          visibility: hidden;
+          width: auto;
+          background-color: rgba(0, 0, 0, 0.7);
+          color: white;
+          text-align: center;
+          border-radius: 6px;
+          padding: 5px;
+          position: absolute;
+          z-index: 1;
+          bottom: 100%;
+          left: 50%;
+          transform: translateX(-50%);
+      }
+      .bubble:hover .tooltiptext {
+          visibility: visible;
+      }
+    </style>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -50,12 +79,14 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="/display_user/" onclick=
-                "location.href=this.href+currentuserid;return false;">My Profile</a>
-                <a class="dropdown-item" href="/update_user">My Account</a>
-                <a class="dropdown-item" href="/user_proficiencies">My Proficiency</a>
+                "location.href=this.href+currentuserid;return false;">View My Profile</a>
                 <a class="dropdown-item" href="/proficiency_spider/" onclick=
-                "location.href=this.href+currentuserid;return false;">My Radar Chart</a>
-                <a class="dropdown-item" href="/qualifications">My Qualifications</a>
+                "location.href=this.href+currentuserid;return false;">View My Radar Chart</a>
+                <a class="dropdown-item" href="/user_sunburst/" onclick=
+                "location.href=this.href+currentuserid;return false;">View My Sunburst Chart</a>
+                <a class="dropdown-item" href="/update_user">Edit My Account</a>
+                <a class="dropdown-item" href="/user_proficiencies">Edit My Proficiencies</a>
+                <a class="dropdown-item" href="/qualifications">Edit My Qualifications</a>
               </div>
             </div>
             <!-- End of user's first name display -->
@@ -72,11 +103,14 @@
                 <a class="dropdown-item" href="/continents">Continents</a>
                 <a class="dropdown-item" href="/countries">Countries</a>
                 <a class="dropdown-item" href="/cities">Cities</a>
+                <a class="dropdown-item" href="/globe">Globe</a>
                 <!-- Add other directories -related links if needed -->
               </div>
             </div>
             <a class="nav-item nav-link" id="proficiencies" href="/proficiencies">Proficiencies</a>
             <a class="nav-item nav-link" id="peolple_finder" href="/people_finder">People Finder</a>
+            <a class="nav-item nav-link" id="bubble_chart" href="/bubble_chart">Skills Bubble Chart</a>
+            <a class="nav-item nav-link" id="bubble_chart" href="/sunburst">Sunburst Chart</a>
           {% else %}
             <a class="nav-item nav-link" id="login" href="/login">Login</a>
             <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>

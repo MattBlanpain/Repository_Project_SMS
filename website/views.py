@@ -7,8 +7,10 @@ from .models import Continent, Country, City, ProfileType
 import pandas as pd
 from passlib.hash import scrypt
 from collections import Counter
-from sqlalchemy import or_
-
+from sqlalchemy import and_
+import plotly.graph_objs as go
+import plotly.express as px
+import plotly
 
 views = Blueprint('views', __name__)
 
@@ -86,7 +88,6 @@ def view_users():
         return cities.get(id)
 
     return render_template('people.html', get_city_name_from_user=get_city_name_from_user, users=users, user=current_user)
-
 
 @views.route('/proficiencies', methods=['GET'])
 @login_required
@@ -194,7 +195,7 @@ def proficiency_spider(user_id):
     # Fetch proficiency levels based on the filtered skills for the selected user
     assessments = Assessment.query.filter_by(for_user=selected_user.id).all()
     proficiency_levels = {assessment.for_skill: assessment.proficiency_level.value for assessment in assessments if assessment.for_skill in [skill.skill_id for skill in filtered_skills]}
-
+    print (proficiency_levels)
     return render_template('proficiency_spider.html', user=current_user, list_skills=list_skills, filtered_skills=filtered_skills, proficiency_levels=proficiency_levels, selected_user=selected_user, groups=groups, categories=categories)
 
 @views.route('/delete_city/<int:city_id>', methods=['POST'])
@@ -247,18 +248,18 @@ def update_user():
 
         current_user.first_name = request.form['firstname']
         current_user.last_name = request.form['lastname']
-        current_user.profile = ProfileType(int(request.form['profile']))
+        #current_user.profile = ProfileType(int(request.form['profile']))
 
         # Assuming you have a foreign key relationship set up in your User model
-        current_user.from_city = City.query.get(int(request.form['city']))
+        current_user.from_city_id = int(request.form['city'])
 
         db.session.commit()
 
-        return redirect(url_for('update_user.html'), cities=cities, user=current_user)
-    return render_template('update_user.html', get_continent_name_from_user=get_continent_name_from_user, get_country_name_from_user=get_country_name_from_user, get_city_name_from_user=get_city_name_from_user, cities=cities, user=current_user)
+        #return redirect(url_for('update_user.html'), cities=cities, user=current_user)
+        return render_template('update_user.html', get_continent_name_from_user=get_continent_name_from_user, get_country_name_from_user=get_country_name_from_user, get_city_name_from_user=get_city_name_from_user, cities=cities, current_city_id=current_user.from_city_id, user=current_user)
 
     # Handle other cases as needed
-    return render_template('error.html', error='Invalid Request')
+    return render_template('update_user.html', get_continent_name_from_user=get_continent_name_from_user, get_country_name_from_user=get_country_name_from_user, get_city_name_from_user=get_city_name_from_user, cities=cities, current_city_id=current_user.from_city_id, user=current_user)
 
 @views.route('/locations')
 def locations():
@@ -296,6 +297,18 @@ def people_finder():
         skill_id_2 = int(skill_id_2)
         min_proficiency_2 = request.form.get('min_proficiency2')
         min_proficiency_2 = int(min_proficiency_2)
+        skill_id_3 = request.form.get('skill3')
+        skill_id_3 = int(skill_id_3)
+        min_proficiency_3 = request.form.get('min_proficiency3')
+        min_proficiency_3 = int(min_proficiency_3)
+        skill_id_4 = request.form.get('skill4')
+        skill_id_4 = int(skill_id_4)
+        min_proficiency_4 = request.form.get('min_proficiency4')
+        min_proficiency_4 = int(min_proficiency_4)
+        skill_id_5 = request.form.get('skill5')
+        skill_id_5 = int(skill_id_5)
+        min_proficiency_5 = request.form.get('min_proficiency5')
+        min_proficiency_5 = int(min_proficiency_5)
 
         level_mapping = {
             5: [ProficiencyLevel.FIVE],
@@ -308,6 +321,9 @@ def people_finder():
 
         allowed_levels_1 = level_mapping.get(min_proficiency_1, [])
         allowed_levels_2 = level_mapping.get(min_proficiency_2, [])
+        allowed_levels_3 = level_mapping.get(min_proficiency_3, [])
+        allowed_levels_4 = level_mapping.get(min_proficiency_4, [])
+        allowed_levels_5 = level_mapping.get(min_proficiency_5, [])
 
         query_filters = []
         query_filters.append(
@@ -320,6 +336,24 @@ def people_finder():
                 db.and_(
                     Assessment.for_skill == skill_id_2,
                     Assessment.proficiency_level.in_(allowed_levels_2)
+                )
+            )
+        query_filters.append(
+                db.and_(
+                    Assessment.for_skill == skill_id_3,
+                    Assessment.proficiency_level.in_(allowed_levels_3)
+                )
+            )
+        query_filters.append(
+                db.and_(
+                    Assessment.for_skill == skill_id_4,
+                    Assessment.proficiency_level.in_(allowed_levels_4)
+                )
+            )
+        query_filters.append(
+                db.and_(
+                    Assessment.for_skill == skill_id_5,
+                    Assessment.proficiency_level.in_(allowed_levels_5)
                 )
             )
         base_query = User.query.join(Assessment)
@@ -335,21 +369,39 @@ def people_finder():
             Assessment.for_skill == skill_id_2,
             Assessment.proficiency_level.in_(allowed_levels_2),
         ).all()
+        matching_users_3 = User.query.join(Assessment).filter(
+            Assessment.for_skill == skill_id_3,
+            Assessment.proficiency_level.in_(allowed_levels_3),
+        ).all()
+        matching_users_4 = User.query.join(Assessment).filter(
+            Assessment.for_skill == skill_id_4,
+            Assessment.proficiency_level.in_(allowed_levels_4),
+        ).all()
+        matching_users_5 = User.query.join(Assessment).filter(
+            Assessment.for_skill == skill_id_5,
+            Assessment.proficiency_level.in_(allowed_levels_5),
+        ).all()
 
         # Extract user IDs from each list
         user_ids_1 = {user.id for user in matching_users_1}
         user_ids_2 = {user.id for user in matching_users_2}
+        user_ids_3 = {user.id for user in matching_users_3}
+        user_ids_4 = {user.id for user in matching_users_4}
+        user_ids_5 = {user.id for user in matching_users_5}
 
         # Find the intersection of user IDs
-        common_user_ids = user_ids_1.intersection(user_ids_2)
+        common_user_ids_1_2 = user_ids_1.intersection(user_ids_2)
+        common_user_ids_1_2_3 = common_user_ids_1_2.intersection(user_ids_3)
+        common_user_ids_1_2_3_4 = common_user_ids_1_2_3.intersection(user_ids_4)
+        common_user_ids_1_2_3_4_5 = common_user_ids_1_2_3_4.intersection(user_ids_5)
 
         # Build a new list of users that have common IDs
-        common_users = [user for user in matching_users_1 if user.id in common_user_ids]
+        common_users = [user for user in matching_users_1 if user.id in common_user_ids_1_2_3_4_5]
 
         # 'common_users' now contains the users that are present in both lists based on their IDs
 
         return render_template('people_finder.html', skills=skills, users=common_users, user=current_user,
-                               selected_skill_1=skill_id_1, selected_min_proficiency_1=min_proficiency_1, selected_skill_2=skill_id_2, selected_min_proficiency_2=min_proficiency_2, get_city_name_from_user=get_city_name_from_user)
+                               selected_skill_1=skill_id_1, selected_min_proficiency_1=min_proficiency_1, selected_skill_2=skill_id_2, selected_min_proficiency_2=min_proficiency_2, selected_skill_3=skill_id_3, selected_min_proficiency_3=min_proficiency_3,selected_skill_4=skill_id_4, selected_min_proficiency_4=min_proficiency_4,selected_skill_5=skill_id_5, selected_min_proficiency_5=min_proficiency_5, get_city_name_from_user=get_city_name_from_user)
 
     return render_template('people_finder.html', skills=skills, user=current_user)
 
@@ -379,3 +431,296 @@ def user_qualifications():
         db.session.commit()
 
     return render_template('qualifications.html', user=current_user)
+
+@views.route('/bubble_chart', methods=['GET', 'POST'])
+def bubble_chart():
+    skill_groups = SkillGroup.query.all()  # Fetch all skill groups for dropdown
+
+    if request.method == 'POST':
+        selected_group_id = request.form.get('group')  # Get selected group ID
+        selected_proficiency = int(request.form.get('proficiency', ProficiencyLevel.TWO.value))  # Default to 2 if not selected
+
+        # Fetch skills with user counts having proficiency >= selected_proficiency for the selected group
+        skills_with_counts = get_skills_with_user_counts(int(selected_proficiency), selected_group_id)
+
+        return render_template('bubble_chart.html', bubble_data=skills_with_counts, selected_proficiency=selected_proficiency, skill_groups=skill_groups, selected_group_id=selected_group_id, user=current_user)
+    else:
+        # Default to proficiency level 2 and display all skills (no group filter)
+        skills_with_counts = get_skills_with_user_counts(ProficiencyLevel.TWO.value)
+        return render_template('bubble_chart.html', bubble_data=skills_with_counts, selected_proficiency=ProficiencyLevel.TWO.value, skill_groups=skill_groups, selected_group_id='', user=current_user)
+
+def get_skills_with_user_counts(proficiency_level, group_id=None):
+    skills_with_counts = {}
+    skills_query = Skill.query
+
+    if group_id:
+        skills_query = skills_query.filter_by(parent_group=group_id)
+
+    skills = skills_query.all()
+    level_mapping = {
+            5: [ProficiencyLevel.FIVE],
+            4: [ProficiencyLevel.FOUR, ProficiencyLevel.FIVE],
+            3: [ProficiencyLevel.THREE, ProficiencyLevel.FOUR, ProficiencyLevel.FIVE],
+            2: [ProficiencyLevel.TWO, ProficiencyLevel.THREE, ProficiencyLevel.FOUR, ProficiencyLevel.FIVE],
+            1: [ProficiencyLevel.ONE, ProficiencyLevel.TWO, ProficiencyLevel.THREE, ProficiencyLevel.FOUR, ProficiencyLevel.FIVE],
+            0: [ProficiencyLevel.ZERO, ProficiencyLevel.ONE, ProficiencyLevel.TWO, ProficiencyLevel.THREE, ProficiencyLevel.FOUR, ProficiencyLevel.FIVE],
+        }
+
+    allowed_levels = level_mapping.get(proficiency_level, [])
+
+    for skill in skills:
+        users_with_proficiency = Assessment.query.filter_by(for_skill=skill.skill_id).filter(Assessment.proficiency_level.in_(allowed_levels)).count()
+        skills_with_counts[skill.skill_name] = users_with_proficiency
+    
+    return skills_with_counts
+
+@views.route('/sunburst_chart', methods=['GET', 'POST'])
+def sunburst_chart():
+
+    skill_groups = SkillGroup.query.all()  # Fetch all skill groups for dropdown
+    selected_proficiency = int(request.form.get('selected_proficiency', ProficiencyLevel.TWO.value))  # Default to 2 if not selected
+    selected_group_id = request.form.get('group')  # Get selected group ID
+
+
+    if request.method == 'POST':
+        selected_group_id = request.form.get('group')  # Get selected group ID
+
+        # Fetch skills with user counts having proficiency >= selected_proficiency for the selected group
+        skills_with_counts = get_skills_with_user_counts(int(selected_proficiency), selected_group_id)
+        return render_template('sunburst_chart.html', chart_fig=chart_fig, selected_proficiency=selected_proficiency, skill_groups=skill_groups, selected_group_id=selected_group_id, user=current_user)
+    else:
+        # Default to proficiency level 2 and display all skills (no group filter)
+        skills_with_counts = get_skills_with_user_counts(ProficiencyLevel.TWO.value)
+    skills_data = db.session.query(Skill.skill_name, SkillGroup.group_name, SkillCategory.category_name, SkillArea.area_name) \
+        .join(SkillGroup, Skill.parent_group == SkillGroup.group_id) \
+        .join(SkillCategory, SkillGroup.parent_category == SkillCategory.category_id) \
+        .join(SkillArea, SkillCategory.parent_area == SkillArea.area_id) \
+        .join(Assessment, Assessment.for_skill == Skill.skill_id) \
+        .filter(Assessment.proficiency_level >= int(selected_proficiency)) \
+        .all()
+
+    # Aggregate data for the Sunburst chart
+    skills = {}
+    for skill, group, category, area in skills_data:
+        if skill not in skills:
+            skills[skill] = {}
+        if group not in skills[skill]:
+            skills[skill][group] = {}
+        if category not in skills[skill][group]:
+            skills[skill][group][category] = []
+        skills[skill][group][category].append(area)
+
+    # Generate data for the Sunburst chart
+    labels = ['Area', 'Category', 'Group', 'Skill']
+    parents = ['', 'Area', 'Category', 'Group']
+    values = []
+    colors = ['#f2f2f2', '#e6e6e6', '#cccccc', '#b3b3b3']
+
+    for skill, groups in skills.items():
+        values.append(len(groups))  # Considering number of groups per skill
+
+        for group, categories in groups.items():
+            values.append(len(categories))  # Considering number of categories per group
+
+            for category, areas in categories.items():
+                values.append(len(areas))  # Considering number of areas per category
+
+                # Uncomment below to include skills (number of users with proficiency >= selected_proficiency)
+                # values.append(len(areas))  # Considering number of skills with proficiency >= selected_proficiency
+
+    trace = go.Sunburst(
+        labels=labels,
+        parents=parents,
+        values=values,
+        branchvalues='total',
+        marker=dict(colors=colors),
+    )
+
+    layout = go.Layout(
+        title='Sunburst Chart',
+        margin=dict(l=0, r=0, b=0, t=40),
+    )
+
+    chart_data = [trace]
+    chart_fig = go.Figure(data=chart_data, layout=layout)
+
+    return render_template('sunburst_chart.html', chart_fig=chart_fig, selected_proficiency=int(selected_proficiency), skill_groups=skill_groups, selected_group_id=selected_group_id, user=current_user)
+
+def get_skills_with_user_counts(proficiency_level, group_id=None):
+    skills_with_counts = {}
+    skills_query = Skill.query
+
+    if group_id:
+        skills_query = skills_query.filter_by(parent_group=group_id)
+
+    skills = skills_query.all()
+    level_mapping = {
+            5: [ProficiencyLevel.FIVE],
+            4: [ProficiencyLevel.FOUR, ProficiencyLevel.FIVE],
+            3: [ProficiencyLevel.THREE, ProficiencyLevel.FOUR, ProficiencyLevel.FIVE],
+            2: [ProficiencyLevel.TWO, ProficiencyLevel.THREE, ProficiencyLevel.FOUR, ProficiencyLevel.FIVE],
+            1: [ProficiencyLevel.ONE, ProficiencyLevel.TWO, ProficiencyLevel.THREE, ProficiencyLevel.FOUR, ProficiencyLevel.FIVE],
+            0: [ProficiencyLevel.ZERO, ProficiencyLevel.ONE, ProficiencyLevel.TWO, ProficiencyLevel.THREE, ProficiencyLevel.FOUR, ProficiencyLevel.FIVE],
+        }
+
+    allowed_levels = level_mapping.get(proficiency_level, [])
+
+    for skill in skills:
+        users_with_proficiency = Assessment.query.filter_by(for_skill=skill.skill_id).filter(Assessment.proficiency_level.in_(allowed_levels)).count()
+        skills_with_counts[skill.skill_name] = users_with_proficiency
+    
+    return skills_with_counts
+
+@views.route('/sunburst', methods=['GET', 'POST'])
+def sunburst():
+
+    selected_min_prof = int(request.args.get('selected_min_prof', 2))
+
+    list_skills = Skill.query.all()  # Fetch all skills for the sunburst chart
+
+    d = []
+    for s in list_skills:
+        skill_name = s.skill_name
+        skill_group = s.get_group_name_for_skill()
+        skill_category = s.get_category_name_for_skill()
+        skill_area = s.get_area_name_for_skill()
+        nb_users = int(get_nb_users_with_prof_for_skill(s,selected_min_prof))
+
+        d.append(
+            {
+                'skill':skill_name,
+                'group':skill_group,
+                'category':skill_category,
+                'area':skill_area,
+                'nb_users':nb_users
+            }
+        )
+
+    df=pd.DataFrame(d)
+
+    rslt_df_without_0 = df[df['nb_users'] != 0] # remove skills with nb user is 0
+
+    # Create chart
+    fig = px.sunburst(
+        data_frame=rslt_df_without_0,
+        path=['area', 'category', 'group', 'skill'],  # Root, branches, leaves
+        values='nb_users',
+        color='nb_users',
+        color_discrete_sequence=px.colors.qualitative.Pastel
+    )
+
+    fig.update_traces(textinfo='label+value')
+    fig.update_layout(margin=dict(t=0, l=0, r=0, b=0))
+
+    # Create graphJSON
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+     
+    # Use render_template to pass graphJSON to html
+    return render_template('sunburst.html', graphJSON=graphJSON, user=current_user, selected_min_prof=selected_min_prof)
+
+def get_nb_users_with_prof_for_skill(a_skill, proficiency_level):
+    level_mapping = {
+            5: [ProficiencyLevel.FIVE],
+            4: [ProficiencyLevel.FOUR, ProficiencyLevel.FIVE],
+            3: [ProficiencyLevel.THREE, ProficiencyLevel.FOUR, ProficiencyLevel.FIVE],
+            2: [ProficiencyLevel.TWO, ProficiencyLevel.THREE, ProficiencyLevel.FOUR, ProficiencyLevel.FIVE],
+            1: [ProficiencyLevel.ONE, ProficiencyLevel.TWO, ProficiencyLevel.THREE, ProficiencyLevel.FOUR, ProficiencyLevel.FIVE],
+            0: [ProficiencyLevel.ZERO, ProficiencyLevel.ONE, ProficiencyLevel.TWO, ProficiencyLevel.THREE, ProficiencyLevel.FOUR, ProficiencyLevel.FIVE],
+        }
+    allowed_levels = level_mapping.get(proficiency_level, [])
+    nb_users = Assessment.query.filter_by(for_skill=a_skill.skill_id).filter(Assessment.proficiency_level.in_(allowed_levels)).count()
+    
+    return nb_users
+
+
+@views.route('/user_sunburst/<int:user_id>', methods=['GET', 'POST'])
+def user_sunburst(user_id):
+
+    selected_user = User.query.get_or_404(user_id)  # Get selected user from user ID
+    list_skills = Skill.query.all()  # Fetch all skills for the sunburst chart
+
+    d = []
+    for s in list_skills:
+        skill_name = s.skill_name
+        skill_group = s.get_group_name_for_skill()
+        skill_category = s.get_category_name_for_skill()
+        skill_area = s.get_area_name_for_skill()
+        skill_proficiency = selected_user.proficiency_for_skill(s.skill_id)
+
+        d.append(
+            {
+                'skill':skill_name,
+                'group':skill_group,
+                'category':skill_category,
+                'area':skill_area,
+                'size':int(1),
+                'proficiency':skill_proficiency
+            }
+        )
+
+    pd.DataFrame(d)
+
+    # Create chart
+    fig = px.sunburst(
+        data_frame=d,
+        path=['area', 'category', 'group', 'skill'],  # Root, branches, leaves
+        values='size',
+        color='proficiency',
+        color_continuous_scale=['#000', '#05106E', '#0A37A6', '#007DFF', '#0CA4EB', '#0DE0FF']
+    )
+
+    fig.update_traces(textinfo='label')
+    fig.update_layout(margin=dict(t=0, l=0, r=0, b=0))
+    fig.update_layout(sunburstcolorway = px.colors.qualitative.Pastel)
+
+    # Create graphJSON
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+     
+    # Use render_template to pass graphJSON to html
+    return render_template('user_sunburst.html', graphJSON=graphJSON, user=current_user, selected_user=selected_user)
+
+@views.route('/globe', methods=['GET', 'POST'])
+def globe():
+
+    countries = Country.query.all()
+        
+    d = []
+    for c in countries:
+        country_name = c.country_name
+        continent_name = c.get_continent_name()
+        country_iso = c.country_iso
+        nb_users = c.get_user_count()
+
+        d.append(
+            {
+                'country':country_name,
+                'continent':continent_name,
+                'iso_alpha':country_iso,
+                'users':nb_users
+            }
+        )
+
+    pd.DataFrame(d)
+
+    fig = px.scatter_geo(d, locations="iso_alpha",
+                        color="continent", # which column to use to set the color of markers
+                        hover_name="country", # column added to hover information
+                        size="users", # size of markers
+                        projection="orthographic")
+
+    fig2 = px.choropleth (d, locations='iso_alpha',
+                          color='users',
+                          hover_name='country', 
+                          #animation_frame='year',
+                          color_continuous_scale=px.colors.sequential.Plasma,
+                          projection='natural earth') 
+    
+    
+    # Create graphJSON
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    # Create graphJSON
+    graphJSON2 = json.dumps(fig2, cls=plotly.utils.PlotlyJSONEncoder)
+     
+    # Use render_template to pass graphJSON to html
+    return render_template('globe.html', graphJSON=graphJSON, graphJSON2=graphJSON2, user=current_user)

@@ -42,7 +42,6 @@
           <option value="ADMIN">Administrator</option>
         </select>
       </div>
-
       <div class="form-group">
         <label for="city">City</label>
         <select name="city" id="city">
@@ -52,28 +51,6 @@
             {% endfor %}
         </select>
       </div>
-
-      <div class="form-group">
-        <label for="country">Country</label>
-        <select name="country" id="country">
-            <!-- Add options dynamically based on your database values -->
-            {% for country in countries %}
-                <option value="{{ country.country_id }}">{{ country.country_name }}</option>
-            {% endfor %}
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="continent">Continent</label>
-        <select name="continent" id="continent">
-            <!-- Add options dynamically based on your database values -->
-            {% for continent in continents %}
-                <option value="{{ continent.continent_id }}">{{ continent.continent_name }}</option>
-            {% endfor %}
-        </select>
-      </div>
-
-
       <div class="form-group">
         <label for="password1">Password</label>
         <input

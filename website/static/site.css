@@ -1,12 +1,21 @@
 table {    border-collapse: collapse;     width: 100%;   }
   
 table, th, td {     border: 1px solid #000;   }
-  
+
+th {
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+  color: #000;
+  font-size: 0.875em
+}
+
 td {
     text-align: center;
     padding: 10px;
-    font-weight: bold;
+    font-weight: normal;
     color: #fff;
+    font-size: 0.875em
   }
   
 td[data-value="0"] {    background: #000; /* Black for 0 */   }
@@ -22,4 +31,16 @@ td[data-value="5"] {    background: #0DE0FF; /* Your custom color for 5 */  }
 #responsive-chart {
   width: 100%;
   background-color: rgb(255, 255, 255);
+}
+
+h1 {
+  font-size: 1.9em; /* 30px/16=2.5em */
+}
+
+h2 {
+  font-size: 1.25em; /* 20px/16=1.875em */
+}
+
+p {
+  font-size: 0.65em; /* 10px/16=0.875em */
 }

@@ -6,9 +6,17 @@
 
 {% block content %}
 <h1 align="center">Proficiency Matrix</h1>
+<h2>This table displays prficiencies for all users, for all skills.</h2>
+<span style = "background-color:black ; color:#FFFFFF; font-size: 0.875em">&nbsp; 0-Not Registered &nbsp;</span>
+<span style = "background-color:#05106E ; color:#FFFFFF; font-size: 0.875em">&nbsp; 1-No Awareness &nbsp;</span>
+<span style = "background-color:#0A37A6 ; color:#FFFFFF; font-size: 0.875em">&nbsp; 2-Beginner / Learn &nbsp;</span>
+<span style = "background-color:#007DFF ; color:#FFFFFF; font-size: 0.875em">&nbsp; 3-Intermediate / Deliver &nbsp;</span>
+<span style = "background-color:#0CA4EB ; color:#FFFFFF; font-size: 0.875em">&nbsp; 4-Advanced / Perform &nbsp;</span>
+<span style = "background-color:#0DE0FF ; color:#FFFFFF; font-size: 0.875em">&nbsp; 5-Expert / Coach &nbsp;</span>
+<br>
 <br>
 <div>
-    <button onclick="showOnlyGroup()">Show Only Group:</button>
+    Filter by Group:
     <select id="groupFilter">
         <option value="all">All Groups</option>
         <!-- Options will be dynamically populated with available groups -->
@@ -16,8 +24,9 @@
             <option value="{{ group.group_id }}" {% if selected_group_id == group.group_id %} selected {% endif %}>{{ group.group_name }}</option>
         {% endfor %}
     </select>
+    <button onclick="showOnlyGroup()">Apply Group filter</button>
     &nbsp;&nbsp;&nbsp;&nbsp;
-    <button onclick="showOnlyCategory()">Show Only Category:</button>
+    Filter by Category:
     <select id="categoryFilter">
         <option value="all">All Categories</option>
         <!-- Options will be dynamically populated with available categories -->
@@ -25,6 +34,7 @@
             <option value="{{ category.category_id }}" {% if selected_category_id == category.category_id %} selected {% endif %}>{{ category.category_name }}</option>
         {% endfor %}
     </select>
+    <button onclick="showOnlyCategory()">Apply Category filter</button>
     &nbsp;&nbsp;&nbsp;&nbsp;
     <button onclick="showAllSkills()">Show All Skills</button>
 </div>

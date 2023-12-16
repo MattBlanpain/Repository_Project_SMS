@@ -7,6 +7,15 @@
 {% block content %}
 
     <h1>Proficiency Levels for : {{ user.first_name }} {{ user.last_name }}</h1>
+    <br>
+    <span style = "background-color:black ; color:#FFFFFF; font-size: 0.875em">&nbsp; 0-Not Registered &nbsp;</span>
+    <span style = "background-color:#05106E ; color:#FFFFFF; font-size: 0.875em">&nbsp; 1-No Awareness &nbsp;</span>
+    <span style = "background-color:#0A37A6 ; color:#FFFFFF; font-size: 0.875em">&nbsp; 2-Beginner / Learn &nbsp;</span>
+    <span style = "background-color:#007DFF ; color:#FFFFFF; font-size: 0.875em">&nbsp; 3-Intermediate / Deliver &nbsp;</span>
+    <span style = "background-color:#0CA4EB ; color:#FFFFFF; font-size: 0.875em">&nbsp; 4-Advanced / Perform &nbsp;</span>
+    <span style = "background-color:#0DE0FF ; color:#FFFFFF; font-size: 0.875em">&nbsp; 5-Expert / Coach &nbsp;</span>
+    <br>
+    <br>
     <div><canvas id="proficiencyChart" width="200" height="200"></canvas></div>
     <form method="post">
         <br>

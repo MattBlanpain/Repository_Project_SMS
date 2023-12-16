@@ -5,35 +5,34 @@
 {% endblock %}
 
 {% block content %}
-    <h1 align="center">My Account</h1>
+    <h1 align="center">Update My Account</h1>
     <body>
         <form method="POST" action="{{ url_for('views.update_user') }}">
-            <p><strong>Email / Login:</strong> {{ user.email }}</p>
+            <strong>Email / Login:</strong> {{ user.email }}
 
+            <br>
             <label for="firstname"><strong>First Name:</strong></label>
             <input type="text" name="firstname" value="{{ user.first_name }}">
             <br>
-
             <label for="lastname"><strong>Last Name:</strong></label>
             <input type="text" name="lastname" value="{{ user.last_name }}">
+<!--
             <br>
-
             <label for="profile"><strong>Profile:</strong></label>
-            <select name="profile">
-                {% for profile in ProfileType %}
-                    <option value="{{ profile.value }}" {% if user.profile == profile %}selected{% endif %}>{{ profile.name }}</option>
-                {% endfor %}
+            <select name="profile" id="profile">
+                <option value=1 {% if profile == 1 %} selected {% endif %}>Employee</option>
+                <option value=1 {% if profile == 2 %} selected {% endif %}>Manager</option>
+                <option value=1 {% if profile == 3 %} selected {% endif %}>Administrator</option>
             </select>
+-->            
             <br>
-
             <label for="city"><strong>City:</strong></label>
             <select name="city">
                 {% for city in cities %}
-                    <option value="{{ city.city_id }}" {% if user.from_city == city %}selected{% endif %}>{{ city.city_name }}</option>
+                    <option value="{{ city.city_id }}" {% if current_city_id == city.city_id %}selected{% endif %}>{{ city.city_name }}</option>
                 {% endfor %}
             </select>
             <br>
-
             <br>
             <input type="submit" value="Update">
         </form>

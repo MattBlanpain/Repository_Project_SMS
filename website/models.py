@@ -16,7 +16,6 @@ class ProficiencyLevel(Enum):
     FOUR = 4
     FIVE = 5
     
-
 class Note(db.Model): ## a class must have Uppercase as first letter
     id = db.Column(db.Integer, primary_key=True)
     data = db.Column(db.String(10000))
@@ -27,9 +26,10 @@ class User(db.Model, UserMixin): ## a class must have Uppercase as first letter
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
-    first_name = db.Column(db.String(150))
-    last_name = db.Column(db.String(150))
+    first_name = db.Column(db.String(20))
+    last_name = db.Column(db.String(20))
     profile = db.Column(db.Enum(ProfileType),default=ProfileType.EMPLOYEE)
+    #joined_on = db.Column(db.DateTime(timezone=True), default=func.now())
     notes = db.relationship('Note') ## here Note is the name of the class Note (not the table), therefore Uppercase as first letter
     was_assessed_by = db.relationship('Assessment')
     #was_assessed_by = db.relationship('Assessment', backref='user', foreign_keys='Assessment.for_user')
@@ -89,6 +89,7 @@ class Skill(db.Model):
     skill_name = db.Column(db.String(150), unique=True)
     parent_group = db.Column(db.Integer, db.ForeignKey('table_groups.group_id'))
     assessed_by = db.relationship('Assessment', backref='skill')  # added backref
+
     def get_skill_name(skill_id):
         skill = Skill.query.filter_by(skill_id=skill_id).first()
         if skill:
@@ -96,6 +97,26 @@ class Skill(db.Model):
         else:
             return None  # Skill ID not found
 
+    def get_group_name_for_skill(self):
+        group = SkillGroup.query.filter_by(group_id=self.parent_group).first()
+        return group.group_name if group else None
+
+    def get_category_name_for_skill(self):
+        group = SkillGroup.query.filter_by(group_id=self.parent_group).first()
+        if group:
+            category = SkillCategory.query.filter_by(category_id=group.parent_category).first()
+            return category.category_name if category else None
+        return None
+
+    def get_area_name_for_skill(self):
+        group = SkillGroup.query.filter_by(group_id=self.parent_group).first()
+        if group:
+            category = SkillCategory.query.filter_by(category_id=group.parent_category).first()
+            if category:
+                area = SkillArea.query.filter_by(area_id=category.parent_area).first()
+                return area.area_name if area else None
+        return None
+    
 class Assessment(db.Model):
     __tablename__ = 'table_assessments'
     assess_id = db.Column(db.Integer, primary_key=True)
@@ -112,14 +133,23 @@ class Continent(db.Model):
     continent_name = db.Column(db.String(100))
     child_countries = db.relationship('Country')
     continent_members = db.relationship('User')
+    def get_user_count(self): # return the number of users who are located in this continent
+        return len(self.continent_members)
 
 class Country(db.Model):
     __tablename__ = 'table_countries'
     country_id = db.Column(db.Integer, primary_key=True)
     country_name = db.Column(db.String(100))
+    country_iso = db.Column(db.String(5))
     parent_continent_id = db.Column(db.Integer, db.ForeignKey('table_continents.continent_id'))
     child_cities = db.relationship('City')
     country_members = db.relationship('User')
+    def get_user_count(self): # return the number of users who are located in this country
+        return len(self.country_members)
+    def get_continent_name(self): # return the name of the continent which is parent for this country
+        continent = Continent.query.filter_by(continent_id=self.parent_continent_id).first()
+        continent_name = continent.continent_name
+        return continent_name
 
 class City(db.Model):
     __tablename__ = 'table_cities'
@@ -127,6 +157,8 @@ class City(db.Model):
     city_name = db.Column(db.String(100))
     parent_country_id = db.Column(db.Integer, db.ForeignKey('table_countries.country_id'))
     city_members = db.relationship('User')
+    def get_user_count(self): # return the number of users who are located in this city
+        return len(self.city_members)
 
 class Qualification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
