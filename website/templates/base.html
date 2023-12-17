@@ -79,7 +79,7 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="/display_user/" onclick=
-                "location.href=this.href+currentuserid;return false;">View My Profile</a>
+                "location.href=this.href+currentuserid;return false;">View My Summary</a>
                 <a class="dropdown-item" href="/proficiency_spider/" onclick=
                 "location.href=this.href+currentuserid;return false;">View My Radar Chart</a>
                 <a class="dropdown-item" href="/user_sunburst/" onclick=
@@ -162,7 +162,7 @@
     method: "POST",
     body: JSON.stringify({ noteId: noteId }),
   }).then((_res) => {
-    window.location.href = "/";
+    window.location.href = "/note";
   });
   }
 </script>

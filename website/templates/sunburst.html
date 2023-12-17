@@ -16,7 +16,7 @@
         Minimum Proficiency (0-5): 
         <input type="range" min="0" max="5" value="{{ selected_min_prof | default(2) }}" step="1" id="proficiencySlider">
         <output for="proficiencySlider" id="sliderValue">{{ selected_min_prof }} - 
-          {% if selected_min_prof == 0 %}Not Registered{% endif %}
+          {% if selected_min_prof == 0 %}Not Evaluated{% endif %}
           {% if selected_min_prof == 1 %}No Awareness{% endif %}
           {% if selected_min_prof == 2 %}Beginner / Learn{% endif %}
           {% if selected_min_prof == 3 %}Intermediate / Deliver{% endif %}

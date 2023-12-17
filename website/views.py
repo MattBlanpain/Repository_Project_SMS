@@ -40,7 +40,9 @@ def delete_note():
             db.session.delete(note)
             db.session.commit()
 
-    return jsonify({})
+    #return jsonify({})
+    return render_template("note.html", user=current_user)
+
 
 @views.route('/skills')
 def display_skill_inventory():
@@ -632,7 +634,6 @@ def get_nb_users_with_prof_for_skill(a_skill, proficiency_level):
     
     return nb_users
 
-
 @views.route('/user_sunburst/<int:user_id>', methods=['GET', 'POST'])
 def user_sunburst(user_id):
 
@@ -724,3 +725,24 @@ def globe():
      
     # Use render_template to pass graphJSON to html
     return render_template('globe.html', graphJSON=graphJSON, graphJSON2=graphJSON2, user=current_user)
+
+@views.route('/note', methods=['GET', 'POST'])
+@login_required
+def note():
+    if request.method == 'POST': 
+        note = request.form.get('note')#Gets the note from the HTML 
+
+        if len(note) < 1:
+            flash('Note is too short!', category='error') 
+        else:
+            new_note = Note(data=note, user_id=current_user.id)  #providing the schema for the note 
+            db.session.add(new_note) #adding the note to the database 
+            db.session.commit()
+            flash('Note added!', category='success')
+
+    return render_template("note.html", user=current_user)
+
+@views.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    return render_template("profile.html", user=current_user)
