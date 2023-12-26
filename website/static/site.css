@@ -44,3 +44,11 @@ h2 {
 p {
   font-size: 0.65em; /* 10px/16=0.875em */
 }
+
+.container {
+  padding-top: 2cm;
+}
+
+.alert {
+  padding-top: 2cm;
+}

@@ -23,7 +23,7 @@
     </script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='site.css')}}" />
-    <title>{% block title %}Home{% endblock %}</title>
+    <title>{% block title %}Base{% endblock %}</title>
     <style>
       .bubble {
           width: 50px; /* Default width */
@@ -55,7 +55,7 @@
     </style>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav id='navbar' class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <a class="navbar-brand" href="/">  <!-- if click on icon then return to home page -->
         <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo"> <!-- Add the logo image here -->
       </a>
@@ -110,7 +110,7 @@
             <a class="nav-item nav-link" id="proficiencies" href="/proficiencies">Proficiencies</a>
             <a class="nav-item nav-link" id="peolple_finder" href="/people_finder">People Finder</a>
             <a class="nav-item nav-link" id="bubble_chart" href="/bubble_chart">Skills Bubble Chart</a>
-            <a class="nav-item nav-link" id="bubble_chart" href="/sunburst">Sunburst Chart</a>
+            <a class="nav-item nav-link" id="bubble_chart" href="/sunburst">Expertise Overview</a>
           {% else %}
             <a class="nav-item nav-link" id="login" href="/login">Login</a>
             <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>

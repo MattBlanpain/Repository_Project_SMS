@@ -647,6 +647,7 @@ def user_sunburst(user_id):
         skill_category = s.get_category_name_for_skill()
         skill_area = s.get_area_name_for_skill()
         skill_proficiency = selected_user.proficiency_for_skill(s.skill_id)
+        skill_proficiency = str(skill_proficiency)
 
         d.append(
             {
@@ -655,7 +656,7 @@ def user_sunburst(user_id):
                 'category':skill_category,
                 'area':skill_area,
                 'size':int(1),
-                'proficiency':skill_proficiency
+                'proficiency':str(skill_proficiency)
             }
         )
 
@@ -667,12 +668,19 @@ def user_sunburst(user_id):
         path=['area', 'category', 'group', 'skill'],  # Root, branches, leaves
         values='size',
         color='proficiency',
-        color_continuous_scale=['#000', '#05106E', '#0A37A6', '#007DFF', '#0CA4EB', '#0DE0FF']
+        color_discrete_map={'(?)':'#32FF32','0':'#000', '1':'#05106E', '2':'#0A37A6', '3':'#007DFF', '4':'#0CA4EB', '5':'#0DE0FF'}
     )
 
     fig.update_traces(textinfo='label')
     fig.update_layout(margin=dict(t=0, l=0, r=0, b=0))
-    fig.update_layout(sunburstcolorway = px.colors.qualitative.Pastel)
+    fig.update_layout(legend=dict(
+    orientation="h",
+    yanchor="bottom",
+    y=1.02,
+    xanchor="right",
+    x=1
+))
+    #fig.update_layout(sunburstcolorway = px.colors.qualitative.Pastel)
 
     # Create graphJSON
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
@@ -742,7 +750,3 @@ def note():
 
     return render_template("note.html", user=current_user)
 
-@views.route('/profile', methods=['GET', 'POST'])
-@login_required
-def profile():
-    return render_template("profile.html", user=current_user)
