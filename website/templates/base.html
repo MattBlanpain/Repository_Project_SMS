@@ -70,50 +70,50 @@
       <div class="collapse navbar-collapse" id="navbar">
         <div class="navbar-nav">
           {% if user.is_authenticated %}
-            <a class="nav-item nav-link" id="home" href="/">Home</a>
-            <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
+            <a class="nav-item nav-link" id="home" href="/">&#x1F3E0; Home</a>
+            <a class="nav-item nav-link" id="logout" href="/logout">&#x1F6AA; Logout</a>
             <!-- Add this part to display the user's first name -->
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  {{ user.first_name }}
+                &#x1F471; {{ user.first_name }}
               </a>
               <div class="dropdown-menu" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="/display_user/" onclick=
-                "location.href=this.href+currentuserid;return false;">View My Summary</a>
+                "location.href=this.href+currentuserid;return false;">&#x1F471; View My Summary</a>
                 <a class="dropdown-item" href="/proficiency_spider/" onclick=
-                "location.href=this.href+currentuserid;return false;">View My Radar Chart</a>
+                "location.href=this.href+currentuserid;return false;">&#x1F578; View My Radar Chart</a>
                 <a class="dropdown-item" href="/user_sunburst/" onclick=
-                "location.href=this.href+currentuserid;return false;">View My Sunburst Chart</a>
-                <a class="dropdown-item" href="/account">Edit My Account</a>
-                <a class="dropdown-item" href="/user_proficiencies">Edit My Proficiencies</a>
-                <a class="dropdown-item" href="/qualifications">Edit My Qualifications</a>
+                "location.href=this.href+currentuserid;return false;">&#x2742; View My Sunburst Chart</a>
+                <a class="dropdown-item" href="/account">&#x1F5BA; Edit My Account</a>
+                <a class="dropdown-item" href="/user_proficiencies">&#x1F39A; Edit My Proficiencies</a>
+                <a class="dropdown-item" href="/qualifications">&#x1F44D; Edit My Qualifications</a>
               </div>
             </div>
             <!-- End of user's first name display -->
             <!-- Add this part to display directories -->
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="directoryDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Directories
+                &#x1F4C7; Directories
               </a>
               <div class="dropdown-menu" aria-labelledby="directoryDropdown">
-                <a class="dropdown-item" href="/locations">Locations Directory</a>
-                <a class="dropdown-item" href="/skills_directory">Skills Directory</a>
-                <a class="dropdown-item" href="/people">People Directory</a>
-                <a class="dropdown-item" href="/skills">Skills</a>
-                <a class="dropdown-item" href="/continents">Continents</a>
-                <a class="dropdown-item" href="/countries">Countries</a>
-                <a class="dropdown-item" href="/cities">Cities</a>
-                <a class="dropdown-item" href="/globe">Globe</a>
+                <a class="dropdown-item" href="/locations">&#x1F6A9; Locations Directory</a>
+                <a class="dropdown-item" href="/skills_directory">&#x1F451; Skills Directory</a>
+                <a class="dropdown-item" href="/people">&#x1F471; People Directory</a>
+                <a class="dropdown-item" href="/skills">&#x2B50; Skills</a>
+                <a class="dropdown-item" href="/continents">&#x1F30D; Continents</a>
+                <a class="dropdown-item" href="/countries">&#x1F3F4; Countries</a>
+                <a class="dropdown-item" href="/cities">&#x1F3F0; Cities</a>
+                <a class="dropdown-item" href="/globe">&#x1F310; Globe</a>
                 <!-- Add other directories -related links if needed -->
               </div>
             </div>
-            <a class="nav-item nav-link" id="proficiencies" href="/proficiencies">Proficiencies</a>
-            <a class="nav-item nav-link" id="peolple_finder" href="/people_finder">People Finder</a>
-            <a class="nav-item nav-link" id="bubble_chart" href="/bubble_chart">Skills Bubble Chart</a>
-            <a class="nav-item nav-link" id="bubble_chart" href="/sunburst">Expertise Overview</a>
+            <a class="nav-item nav-link" id="proficiencies" href="/proficiencies">&#x1F39A; Proficiencies</a>
+            <a class="nav-item nav-link" id="peolple_finder" href="/people_finder">&#x1F50E; People Finder</a>
+            <a class="nav-item nav-link" id="bubble_chart" href="/bubble_chart">&#x2B50; Skills Bubble Chart</a>
+            <a class="nav-item nav-link" id="bubble_chart" href="/sunburst">&#x1F451; Expertise Overview</a>
           {% else %}
-            <a class="nav-item nav-link" id="login" href="/login">Login</a>
-            <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>
+            <a class="nav-item nav-link" id="login" href="/login">&#x2386; Login</a>
+            <a class="nav-item nav-link" id="signUp" href="/sign-up">&#x1F58B; Sign Up</a>
           {% endif %}
         </div>
       </div>
