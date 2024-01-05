@@ -11,6 +11,11 @@ from sqlalchemy import and_
 import plotly.graph_objs as go
 import plotly.express as px
 import plotly
+import os
+import secrets
+from PIL import Image
+from .forms import RegistrationForm, LoginForm, UpdateAccountForm
+import sys
 
 views = Blueprint('views', __name__)
 
@@ -750,3 +755,51 @@ def note():
 
     return render_template("note.html", user=current_user)
 
+
+
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+
+    fn = getattr(sys.modules['__main__'], '__file__')
+    #root_path = os.path.abspath(os.path.dirname(fn))
+    the_path = 'c:/Users/mabl01/Documents/Project_SMS/website'
+    picture_path = os.path.join(the_path, 'static/profile_pics', picture_fn)
+    #picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+
+    cwd = os.getcwd()  # Get the current working directory (cwd)
+    files = os.listdir(cwd)  # Get all the files in that directory
+    print("Files in %r: %s" % (cwd, files))
+
+    output_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+
+    return picture_fn
+
+
+@views.route("/account", methods=['GET', 'POST'])
+@login_required
+def account():
+    form = UpdateAccountForm()
+    #if form.validate_on_submit():
+    if request.method == 'POST':
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.image_file = picture_file
+        current_user.first_name = form.first_name.data
+        current_user.last_name = form.last_name.data
+        db.session.commit()
+        flash('Your account has been updated!', 'success')
+        return redirect(url_for('views.account'))
+        #return render_template('account.html', title='Account', image_file=image_file, form=form, user=current_user)
+    elif request.method == 'GET':
+        form.first_name.data = current_user.first_name
+        form.last_name.data = current_user.last_name
+
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    print(image_file)
+    return render_template('account.html', title='Account',
+                           image_file=image_file, form=form, user=current_user)

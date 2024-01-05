@@ -24,16 +24,17 @@ class Note(db.Model): ## a class must have Uppercase as first letter
 
 class User(db.Model, UserMixin): ## a class must have Uppercase as first letter
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(150), unique=True)
+    email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(20))
     last_name = db.Column(db.String(20))
     profile = db.Column(db.Enum(ProfileType),default=ProfileType.EMPLOYEE)
-    #supervisor_id = db.relationship('User')
-    #is_supervisor_of = db.Column(db.Integer, db.ForeignKey('user.id'))
+    image_file = db.Column(db.String(20), default='default.jpg')
+    is_supervised_by = db.relationship('User')
+    is_supervisor_of = db.Column(db.Integer, db.ForeignKey('user.id'))
     #hired_on = db.Column(db.DateTime(timezone=True), default=func.now())
     #registered_on = db.Column(db.DateTime(timezone=True), default=func.now())
-    #job_position = db.Column(db.String(150))
+    #job_title = db.Column(db.String(150))
     notes = db.relationship('Note') ## here Note is the name of the class Note (not the table), therefore Uppercase as first letter
     was_assessed_by = db.relationship('Assessment')
     #was_assessed_by = db.relationship('Assessment', backref='user', foreign_keys='Assessment.for_user')
@@ -63,6 +64,8 @@ class User(db.Model, UserMixin): ## a class must have Uppercase as first letter
         if assessment:
             return assessment.proficiency_level.value  # Assuming proficiency_level is an Enum
         return 0  # Or handle the case where there's no assessment for the user and skill
+    def __repr__(self):
+        return f"User('{self.firstname}', '{self.fullname}', '{self.image_file}')"
     
 class SkillArea(db.Model):
     __tablename__ = 'table_areas'
