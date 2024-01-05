@@ -6,6 +6,8 @@
 
 {% block content %}
     <h1 align="center">Summary {{ selected_user.first_name }} {{ selected_user.last_name }}</h1>
+            <img class="rounded-circle account-img" src="/static/profile_pics/{{ user.image_file }}" class="avatar avatar-sm" style="width:50px;height:50px;">
+            <br>
             <strong>Email / Login: </strong>{{ selected_user.email }}
             <br>
             <strong>First Name: </strong>{{ selected_user.first_name }}

@@ -129,7 +129,8 @@
         <ul>
             {% for user in users %}
                 <li>
-                    {{ user.first_name }} {{ user.last_name }} - from city: {{ get_city_name_from_user(user.from_city_id) }} , <a href="{{ url_for('views.display_user', user_id=user.id) }}"> go to user profile</a>
+                    <img class="rounded-circle account-img" src="/static/profile_pics/{{ user.image_file }}" class="avatar avatar-sm" style="width:30px;height:30px;">
+                    {{ user.first_name }} {{ user.last_name }} - from: {{ get_city_name_from_user(user.from_city_id) }} , <a href="{{ url_for('views.display_user', user_id=user.id) }}"> go to user profile</a>
                     {% if selected_min_proficiency_1 != 0 %}
                         <br>&nbsp; &nbsp; &nbsp;
                         {% if user.proficiency_for_skill(selected_skill_1) == 5 %}<span style = "background-color:#0DE0FF ; color:#FFFFFF">&nbsp;5&nbsp;</span>{% endif %}

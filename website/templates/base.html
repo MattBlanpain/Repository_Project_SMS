@@ -74,12 +74,14 @@
             <a class="nav-item nav-link" id="logout" href="/logout">&#x1F6AA; Logout</a>
             <!-- Add this part to display the user's first name -->
             <div class="nav-item dropdown">
+              
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                &#x1F471; {{ user.first_name }}
+                <img class="rounded-circle account-img" src="/static/profile_pics/{{ user.image_file }}" class="avatar avatar-sm" style="width:20px;height:20px;">
+                {{ user.first_name }}
               </a>
               <div class="dropdown-menu" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="/display_user/" onclick=
-                "location.href=this.href+currentuserid;return false;">&#x1F471; View My Summary</a>
+                "location.href=this.href+currentuserid;return false;"><img class="rounded-circle account-img" src="/static/profile_pics/{{ user.image_file }}" class="avatar avatar-sm" style="width:20px;height:20px;"> View My Summary</a>
                 <a class="dropdown-item" href="/proficiency_spider/" onclick=
                 "location.href=this.href+currentuserid;return false;">&#x1F578; View My Radar Chart</a>
                 <a class="dropdown-item" href="/user_sunburst/" onclick=
