@@ -401,7 +401,7 @@
           <div class="card shadow mb-4">
             <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-              <h6 class="m-0 font-weight-bold text-primary">Proficiency Levels / SkillMeter</h6>
+              <h6 class="m-0 font-weight-bold text-primary">Proficiency Scale / SkillMeter</h6>
               <div class="dropdown no-arrow">
                 <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
@@ -418,8 +418,28 @@
             <!-- Card Body -->
             <div class="card-body">
               <div>
-                  <img src="{{ url_for('static', filename='proficiency_levels.png') }}" alt="skills_directory">
+                <img src="{{ url_for('static', filename='proficiency_levels.png') }}" alt="skills_directory">
               </div>
+              <p style="line-height: 1.8;">
+                <div style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:100%;float:center;background-color:black ; color:#FFFFFF;margin-left:0;padding:5px;text-align:center;font-size: 0.65em;">
+                  0=I didn’t evaluate this yet. Perhaps I'am good, perhaps I'm bad at it.
+                </div>
+                <div style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:100%;float:center;background-color:#05106E ; color:#FFFFFF;margin-left:0;padding:5px;text-align:center;font-size: 0.65em;">
+                  1=I don’t even know what this is.
+                </div>
+                <div style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:100%;float:center;background-color:#0A37A6 ; color:#FFFFFF;margin-left:0;padding:5px;text-align:center;font-size: 0.65em;">
+                  2=I’ve done this a few times and I’m familiar, but I still need supervision.
+                </div>
+                <div style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:100%;float:center;background-color:#007DFF ; color:#FFFFFF;margin-left:0;padding:5px;text-align:center;font-size: 0.65em;">
+                  3=I’ve done this multiple times and can do this well, with only seldom expert support.
+                </div>
+                <div style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:100%;float:center;background-color:#0CA4EB ; color:#FFFFFF;margin-left:0;padding:5px;text-align:center;font-size: 0.65em;">
+                  4=I’ve done this in multiple companies, industries, and can design and lead a project. I can conduct a training.
+                </div>
+                <div style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:100%;float:center;background-color:#0DE0FF ; color:#FFFFFF;margin-left:0;padding:5px;text-align:center;font-size: 0.65em;">
+                  5=I’m a global expert at this and I could “write the book” or “teach a masterclass” on this.
+                </div>
+              </p>
             </div>
           </div>
         </div>
