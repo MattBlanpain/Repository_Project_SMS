@@ -124,70 +124,108 @@
     </form>
 
     {% if users %}
-        <br>
-        <h3>{{ users|length }} Matching Users:</h3>
-        <ul>
+    <br>
+    <h3>{{ users|length }} Matching Users:</h3>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>{% for skill in skills %}
+                    {% if skill.skill_id == selected_skill_1 %}  {{ skill.skill_name }} {% endif %}
+                    {% endfor %}</th>
+                <th>{% for skill in skills %}
+                    {% if skill.skill_id == selected_skill_2 %}  {{ skill.skill_name }} {% endif %}
+                    {% endfor %}</th>
+                <th>{% for skill in skills %}
+                    {% if skill.skill_id == selected_skill_3 %}  {{ skill.skill_name }} {% endif %}
+                    {% endfor %}</th>
+                <th>{% for skill in skills %}
+                    {% if skill.skill_id == selected_skill_4 %}  {{ skill.skill_name }} {% endif %}
+                    {% endfor %}</th>
+                <th>{% for skill in skills %}
+                    {% if skill.skill_id == selected_skill_5 %}  {{ skill.skill_name }} {% endif %}
+                    {% endfor %}</th>
+                <!-- Add more headers for additional skills -->
+            </tr>
+        </thead>
+        <tbody>
             {% for user in users %}
-                <li>
-                    <img class="rounded-circle account-img" src="/static/profile_pics/{{ user.image_file }}" class="avatar avatar-sm" style="width:30px;height:30px;">
-                    {{ user.first_name }} {{ user.last_name }} - from: {{ get_city_name_from_user(user.from_city_id) }} , <a href="{{ url_for('views.display_user', user_id=user.id) }}"> go to user profile</a>
-                    {% if selected_min_proficiency_1 != 0 %}
-                        <br>&nbsp; &nbsp; &nbsp;
-                        {% if user.proficiency_for_skill(selected_skill_1) == 5 %}<span style = "background-color:#0DE0FF ; color:#FFFFFF">&nbsp;5&nbsp;</span>{% endif %}
-                        {% if user.proficiency_for_skill(selected_skill_1) == 4 %}<span style = "background-color:#0CA4EB ; color:#FFFFFF">&nbsp;4&nbsp;</span>{% endif %}
-                        {% if user.proficiency_for_skill(selected_skill_1) == 3 %}<span style = "background-color:#007DFF ; color:#FFFFFF">&nbsp;3&nbsp;</span>{% endif %}
-                        {% if user.proficiency_for_skill(selected_skill_1) == 2 %}<span style = "background-color:#0A37A6 ; color:#FFFFFF">&nbsp;2&nbsp;</span>{% endif %}
-                        {% if user.proficiency_for_skill(selected_skill_1) == 1 %}<span style = "background-color:#05106E ; color:#FFFFFF">&nbsp;1&nbsp;</span>{% endif %}
-                        {% for skill in skills %}
-                        {% if skill.skill_id == selected_skill_1 %}  {{ skill.skill_name }} {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if selected_min_proficiency_2 != 0 %}
-                        <br>&nbsp; &nbsp; &nbsp;
-                        {% if user.proficiency_for_skill(selected_skill_2) == 5 %}<span style = "background-color:#0DE0FF ; color:#FFFFFF">&nbsp;5&nbsp;</span>{% endif %}
-                        {% if user.proficiency_for_skill(selected_skill_2) == 4 %}<span style = "background-color:#0CA4EB ; color:#FFFFFF">&nbsp;4&nbsp;</span>{% endif %}
-                        {% if user.proficiency_for_skill(selected_skill_2) == 3 %}<span style = "background-color:#007DFF ; color:#FFFFFF">&nbsp;3&nbsp;</span>{% endif %}
-                        {% if user.proficiency_for_skill(selected_skill_2) == 2 %}<span style = "background-color:#0A37A6 ; color:#FFFFFF">&nbsp;2&nbsp;</span>{% endif %}
-                        {% if user.proficiency_for_skill(selected_skill_2) == 1 %}<span style = "background-color:#05106E ; color:#FFFFFF">&nbsp;1&nbsp;</span>{% endif %}
-                        {% for skill in skills %}
-                        {% if skill.skill_id == selected_skill_2 %}  {{ skill.skill_name }} {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if selected_min_proficiency_3 != 0 %}
-                        <br>&nbsp; &nbsp; &nbsp;
-                        {% if user.proficiency_for_skill(selected_skill_3) == 5 %}<span style = "background-color:#0DE0FF ; color:#FFFFFF">&nbsp;5&nbsp;</span>{% endif %}
-                        {% if user.proficiency_for_skill(selected_skill_3) == 4 %}<span style = "background-color:#0CA4EB ; color:#FFFFFF">&nbsp;4&nbsp;</span>{% endif %}
-                        {% if user.proficiency_for_skill(selected_skill_3) == 3 %}<span style = "background-color:#007DFF ; color:#FFFFFF">&nbsp;3&nbsp;</span>{% endif %}
-                        {% if user.proficiency_for_skill(selected_skill_3) == 2 %}<span style = "background-color:#0A37A6 ; color:#FFFFFF">&nbsp;2&nbsp;</span>{% endif %}
-                        {% if user.proficiency_for_skill(selected_skill_3) == 1 %}<span style = "background-color:#05106E ; color:#FFFFFF">&nbsp;1&nbsp;</span>{% endif %}
-                        {% for skill in skills %}
-                        {% if skill.skill_id == selected_skill_3 %}  {{ skill.skill_name }} {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if selected_min_proficiency_4 != 0 %}
-                        <br>&nbsp; &nbsp; &nbsp;
-                        {% if user.proficiency_for_skill(selected_skill_4) == 5 %}<span style = "background-color:#0DE0FF ; color:#FFFFFF">&nbsp;5&nbsp;</span>{% endif %}
-                        {% if user.proficiency_for_skill(selected_skill_4) == 4 %}<span style = "background-color:#0CA4EB ; color:#FFFFFF">&nbsp;4&nbsp;</span>{% endif %}
-                        {% if user.proficiency_for_skill(selected_skill_4) == 3 %}<span style = "background-color:#007DFF ; color:#FFFFFF">&nbsp;3&nbsp;</span>{% endif %}
-                        {% if user.proficiency_for_skill(selected_skill_4) == 2 %}<span style = "background-color:#0A37A6 ; color:#FFFFFF">&nbsp;2&nbsp;</span>{% endif %}
-                        {% if user.proficiency_for_skill(selected_skill_4) == 1 %}<span style = "background-color:#05106E ; color:#FFFFFF">&nbsp;1&nbsp;</span>{% endif %}
-                        {% for skill in skills %}
-                        {% if skill.skill_id == selected_skill_4 %}  {{ skill.skill_name }} {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if selected_min_proficiency_5 != 0 %}
-                        <br>&nbsp; &nbsp; &nbsp;
-                        {% if user.proficiency_for_skill(selected_skill_5) == 5 %}<span style = "background-color:#0DE0FF ; color:#FFFFFF">&nbsp;5&nbsp;</span>{% endif %}
-                        {% if user.proficiency_for_skill(selected_skill_5) == 4 %}<span style = "background-color:#0CA4EB ; color:#FFFFFF">&nbsp;4&nbsp;</span>{% endif %}
-                        {% if user.proficiency_for_skill(selected_skill_5) == 3 %}<span style = "background-color:#007DFF ; color:#FFFFFF">&nbsp;3&nbsp;</span>{% endif %}
-                        {% if user.proficiency_for_skill(selected_skill_5) == 2 %}<span style = "background-color:#0A37A6 ; color:#FFFFFF">&nbsp;2&nbsp;</span>{% endif %}
-                        {% if user.proficiency_for_skill(selected_skill_5) == 1 %}<span style = "background-color:#05106E ; color:#FFFFFF">&nbsp;1&nbsp;</span>{% endif %}
-                        {% for skill in skills %}
-                        {% if skill.skill_id == selected_skill_5 %}  {{ skill.skill_name }} {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                </li>
+                <tr>
+                    <td bgcolor="#58D68D">
+                        <img class="rounded-circle account-img" src="/static/profile_pics/{{ user.image_file }}" class="avatar avatar-sm" style="width:30px;height:30px;">
+                        {{ user.first_name }} {{ user.last_name }} - from: {{ get_city_name_from_user(user.from_city_id) }} , <a href="{{ url_for('views.display_user', user_id=user.id) }}"> go to user profile</a>
+                    </td>
+                    <!-- Display proficiency levels in different columns -->
+                    <td>
+                        {% if selected_min_proficiency_1 != 0 %}
+                            {% if user.proficiency_for_skill(selected_skill_1) == 5 %}<span style="background-color:#0DE0FF ; color:#FFFFFF">&nbsp;5&nbsp;</span>{% endif %}
+                            {% if user.proficiency_for_skill(selected_skill_1) == 4 %}<span style="background-color:#0CA4EB ; color:#FFFFFF">&nbsp;4&nbsp;</span>{% endif %}
+                            {% if user.proficiency_for_skill(selected_skill_1) == 3 %}<span style="background-color:#007DFF ; color:#FFFFFF">&nbsp;3&nbsp;</span>{% endif %}
+                            {% if user.proficiency_for_skill(selected_skill_1) == 2 %}<span style="background-color:#0A37A6 ; color:#FFFFFF">&nbsp;2&nbsp;</span>{% endif %}
+                            {% if user.proficiency_for_skill(selected_skill_1) == 1 %}<span style="background-color:#05106E ; color:#FFFFFF">&nbsp;1&nbsp;</span>{% endif %}
+                            {% for skill in skills %}
+                                {% if skill.skill_id == selected_skill_1 %} {{ skill.skill_name }} {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                    <!-- Repeat the structure for other selected skills -->
+                    <td>
+                        {% if selected_min_proficiency_2 != 0 %}
+                            {% if user.proficiency_for_skill(selected_skill_2) == 5 %}<span style="background-color:#0DE0FF ; color:#FFFFFF">&nbsp;5&nbsp;</span>{% endif %}
+                            {% if user.proficiency_for_skill(selected_skill_2) == 4 %}<span style="background-color:#0CA4EB ; color:#FFFFFF">&nbsp;4&nbsp;</span>{% endif %}
+                            {% if user.proficiency_for_skill(selected_skill_2) == 3 %}<span style="background-color:#007DFF ; color:#FFFFFF">&nbsp;3&nbsp;</span>{% endif %}
+                            {% if user.proficiency_for_skill(selected_skill_2) == 2 %}<span style="background-color:#0A37A6 ; color:#FFFFFF">&nbsp;2&nbsp;</span>{% endif %}
+                            {% if user.proficiency_for_skill(selected_skill_2) == 1 %}<span style="background-color:#05106E ; color:#FFFFFF">&nbsp;1&nbsp;</span>{% endif %}
+                            {% for skill in skills %}
+                                {% if skill.skill_id == selected_skill_2 %} {{ skill.skill_name }} {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if selected_min_proficiency_3 != 0 %}
+                            {% if user.proficiency_for_skill(selected_skill_3) == 5 %}<span style="background-color:#0DE0FF ; color:#FFFFFF">&nbsp;5&nbsp;</span>{% endif %}
+                            {% if user.proficiency_for_skill(selected_skill_3) == 4 %}<span style="background-color:#0CA4EB ; color:#FFFFFF">&nbsp;4&nbsp;</span>{% endif %}
+                            {% if user.proficiency_for_skill(selected_skill_3) == 3 %}<span style="background-color:#007DFF ; color:#FFFFFF">&nbsp;3&nbsp;</span>{% endif %}
+                            {% if user.proficiency_for_skill(selected_skill_3) == 2 %}<span style="background-color:#0A37A6 ; color:#FFFFFF">&nbsp;2&nbsp;</span>{% endif %}
+                            {% if user.proficiency_for_skill(selected_skill_3) == 1 %}<span style="background-color:#05106E ; color:#FFFFFF">&nbsp;1&nbsp;</span>{% endif %}
+                            {% for skill in skills %}
+                                {% if skill.skill_id == selected_skill_3 %} {{ skill.skill_name }} {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if selected_min_proficiency_4 != 0 %}
+                            {% if user.proficiency_for_skill(selected_skill_4) == 5 %}<span style="background-color:#0DE0FF ; color:#FFFFFF">&nbsp;5&nbsp;</span>{% endif %}
+                            {% if user.proficiency_for_skill(selected_skill_4) == 4 %}<span style="background-color:#0CA4EB ; color:#FFFFFF">&nbsp;4&nbsp;</span>{% endif %}
+                            {% if user.proficiency_for_skill(selected_skill_4) == 3 %}<span style="background-color:#007DFF ; color:#FFFFFF">&nbsp;3&nbsp;</span>{% endif %}
+                            {% if user.proficiency_for_skill(selected_skill_4) == 2 %}<span style="background-color:#0A37A6 ; color:#FFFFFF">&nbsp;2&nbsp;</span>{% endif %}
+                            {% if user.proficiency_for_skill(selected_skill_4) == 1 %}<span style="background-color:#05106E ; color:#FFFFFF">&nbsp;1&nbsp;</span>{% endif %}
+                            {% for skill in skills %}
+                                {% if skill.skill_id == selected_skill_4 %} {{ skill.skill_name }} {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if selected_min_proficiency_5 != 0 %}
+                            {% if user.proficiency_for_skill(selected_skill_5) == 5 %}<span style="background-color:#0DE0FF ; color:#FFFFFF">&nbsp;5&nbsp;</span>{% endif %}
+                            {% if user.proficiency_for_skill(selected_skill_5) == 4 %}<span style="background-color:#0CA4EB ; color:#FFFFFF">&nbsp;4&nbsp;</span>{% endif %}
+                            {% if user.proficiency_for_skill(selected_skill_5) == 3 %}<span style="background-color:#007DFF ; color:#FFFFFF">&nbsp;3&nbsp;</span>{% endif %}
+                            {% if user.proficiency_for_skill(selected_skill_5) == 2 %}<span style="background-color:#0A37A6 ; color:#FFFFFF">&nbsp;2&nbsp;</span>{% endif %}
+                            {% if user.proficiency_for_skill(selected_skill_5) == 1 %}<span style="background-color:#05106E ; color:#FFFFFF">&nbsp;1&nbsp;</span>{% endif %}
+                            {% for skill in skills %}
+                                {% if skill.skill_id == selected_skill_5 %} {{ skill.skill_name }} {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                    <!-- Add more columns for additional skills -->
+                </tr>
             {% endfor %}
-        </ul>
+        </tbody>
+    </table>
+    <br>
+    {% else %}
+        <br>
+        <h3>No Matching Users. You may lower minimum proficiency levels required.</h3>
     {% endif %}
 {% endblock %}
+
