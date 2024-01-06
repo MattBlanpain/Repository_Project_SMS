@@ -8,12 +8,12 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <body>
         <h1 align="center">Expertise Overview</h1>
-        <br>
         <pre>
             This sunburst chart displays all skills where there are users who have at least the selected minimum proficiency.
+            Yellow means: where they are most users with the selected proficiency.
             Click on an inner circle to filter the chart.
         </pre>
-        Minimum Proficiency (0-5): 
+        Select a minimum Proficiency (0-5): 
         <input type="range" min="0" max="5" value="{{ selected_min_prof | default(2) }}" step="1" id="proficiencySlider">
         <output for="proficiencySlider" id="sliderValue">{{ selected_min_prof }} - 
           {% if selected_min_prof == 0 %}Not Evaluated{% endif %}
@@ -23,6 +23,7 @@
           {% if selected_min_prof == 4 %}Advanced / Perform{% endif %}
           {% if selected_min_prof == 5 %}Expert / Coach{% endif %}
         </output>
+        <br>
         <br>
         <div id='chart' class='chart'></div>
         <br>
