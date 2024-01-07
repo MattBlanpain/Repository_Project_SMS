@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block title %}
+  User
+{% endblock %}
+{% block content %}
+
+<h1 align="center">Summary {{ selected_user.first_name }} {{ selected_user.last_name }}</h1>
+    <br>
+    <div class="container-fluid">
+      <div class="row"> <!-- start first row -->
+        <div class="col-sm"> <!-- start of first column, from first row -->
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="align-items-center">
+                <div style="color:blueviolet; font:bold; text-align: center;">
+                  User
+                </div>
+                <div>
+                  <img class="rounded-circle account-img" src="/static/profile_pics/{{ user.image_file }}" class="avatar avatar-sm" style="width:50px;height:50px;">
+                  <br>
+                  <strong>Email / Login: </strong>{{ selected_user.email }}
+                  <br>
+                  <strong>First Name: </strong>{{ selected_user.first_name }}
+                  <br>
+                  <strong>Last Name: </strong>{{ selected_user.last_name }}
+                  <br>
+                  <strong>From City: </strong>{{ get_city_name_from_user(selected_user.from_city_id) }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- end of first column, from first row -->
+        <div class="col-sm"> <!-- start of second column, from first row -->
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="align-items-center">
+                <div style="color:blueviolet; font:bold; text-align: center;">
+                  View Proficiencies
+                </div>
+                <br>
+                <div>
+                  <a href="/proficiency_spider/" onclick=
+                  "location.href=this.href+selecteduserid;return false;"><img src="{{ url_for('static', filename='radar_chart.png') }}" alt="Radar_Chart">&nbsp;&nbsp;go to radar chart</a>
+                  <br>
+                  <br>
+                  <a href="/user_sunburst/" onclick=
+                  "location.href=this.href+selecteduserid;return false;"><img src="{{ url_for('static', filename='sunburst.jpg') }}" alt="Radar_Chart">&nbsp;&nbsp;go to sunburst chart</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- end of second column, from first row -->
+        <div class="col-sm"> <!-- start of third column, from first row -->
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="align-items-center">
+                <div style="color:blueviolet; font:bold; text-align: center;">
+                  Self Assessment Status
+                </div>
+                <div>
+                  <canvas id="proficiencyChart" width="150" height="150"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- end of third column, from first row -->
+      </div> <!-- end of first row -->
+      <br>
+      <div class="row"> <!-- start second row -->
+        <div class="col-sm"> <!-- start of first column, from second row -->
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="align-items-center">
+                <div style="color:blueviolet; font:bold; text-align: center;">
+                  Top Skills
+                </div>
+                <div>
+                  <ul>
+                    {% for skill, proficiency in selected_user.get_top_skills() %}
+                        <li>
+                            {% if proficiency == "FIVE" %}<span style = "color:white; font-weight: bold; background-color:#0DE0FF">&nbsp;5&nbsp;</span>{% endif %}
+                            {% if proficiency == "FOUR" %}<span style = "color:white; font-weight: bold; background-color:#0CA4EB">&nbsp;4&nbsp;</span>{% endif %}
+                            {% if proficiency == "THREE" %}<span style = "color:white; font-weight: bold; background-color:#007DFF">&nbsp;3&nbsp;</span>{% endif %}
+                            {% if proficiency == "TWO" %}<span style = "color:white; font-weight: bold; background-color:#0A37A6">&nbsp;2&nbsp;</span>{% endif %}
+                            {% if proficiency == "ONE" %}<span style = "color:white; font-weight: bold; background-color:#05106E">&nbsp;1&nbsp;</span>{% endif %}
+                            {% if proficiency == "ZERO" %}<span style = "color:white; font-weight: bold; background-color:#000">&nbsp;0&nbsp;</span>{% endif %}
+                            &nbsp;-&nbsp;{{ skill.skill_name }}
+                        </li>
+                    {% endfor %}
+                  </ul>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- end of first column, from second row -->
+        <div class="col-sm"> <!-- start of second column, from second row -->
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="align-items-center">
+                <div style="color:blueviolet; font:bold; text-align: center;">
+                  Top Categories
+                </div>
+                <div>
+                  coming soon...
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- end of second column, from second row -->
+        <div class="col-sm"> <!-- start of third column, from second row -->
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="align-items-center">
+                <div style="color:blueviolet; font:bold; text-align: center;">
+                  Top Qualifications
+                </div>
+                <div>
+                  coming soon...
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- end of third column, from second row -->
+      </div> <!-- end of second row -->
+    </div> <!-- end of container-fluid -->
+    <br>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Data for the pie chart
+        var proficiencyData = [
+            {{ proficiency_counts[0] }},
+            {{ proficiency_counts[1] }},
+            {{ proficiency_counts[2] }},
+            {{ proficiency_counts[3] }},
+            {{ proficiency_counts[4] }},
+            {{ proficiency_counts[5] }},
+        ];
+    
+        var ctx = document.getElementById('proficiencyChart').getContext('2d');
+        var proficiencyChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['0-Not Evaluated', '1-No Awareness', '2-Beginner / Learn', '3-Intermediate / Deliver', '4-Advanced / Perform', '5-Expert / Coach'],
+                datasets: [{
+                    data: proficiencyData,
+                    backgroundColor: [
+                        'rgba(0, 0, 0, 1)',
+                        'rgba(5, 16, 110, 1)',
+                        'rgba(10, 55, 166, 1)',
+                        'rgba(0, 125, 255, 1)',
+                        'rgba(12, 164, 235, 1)',
+                        'rgba(13, 224, 255, 1)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    display: false
+                  }
+                }
+              }
+        });
+    </script>    
+
+
+{% endblock %}

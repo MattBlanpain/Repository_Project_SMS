@@ -805,3 +805,26 @@ def account():
     print(image_file)
     return render_template('account.html', title='Account',
                            image_file=image_file, form=form, user=current_user)
+
+@views.route('/user/<int:user_id>', methods=['GET'])
+@login_required
+def user(user_id):
+    selected_user = User.query.get_or_404(user_id)
+    continents = {continent.continent_id: continent.continent_name for continent in Continent.query.all()}
+    countries = {country.country_id: country.country_name for country in Country.query.all()}
+    cities = {city.city_id: city.city_name for city in City.query.all()}
+
+    # Calculate proficiency counts for each level
+    assessments = Assessment.query.filter_by(for_user=current_user.id).all()
+    proficiency_levels = {assessment.for_skill: assessment.proficiency_level.value for assessment in assessments}
+    proficiency_counts = Counter(proficiency_levels.values())
+
+    # Define the function within the route handler
+    def get_continent_name_from_user(id):
+        return continents.get(id)
+    def get_country_name_from_user(id):
+        return countries.get(id)
+    def get_city_name_from_user(id):
+        return cities.get(id)
+    return render_template('user.html', get_continent_name_from_user=get_continent_name_from_user, get_country_name_from_user=get_country_name_from_user, get_city_name_from_user=get_city_name_from_user, user=current_user, selected_user=selected_user, proficiency_counts=proficiency_counts)
+
