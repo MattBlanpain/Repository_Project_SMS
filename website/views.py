@@ -22,6 +22,10 @@ views = Blueprint('views', __name__)
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
+    users = User.query.all()
+    cities = City.query.all()
+    countries = Country.query.all()
+    skills = Skill.query.all()
     if request.method == 'POST': 
         note = request.form.get('note')#Gets the note from the HTML 
 
@@ -33,7 +37,7 @@ def home():
             db.session.commit()
             flash('Note added!', category='success')
 
-    return render_template("home.html", user=current_user)
+    return render_template("home.html", user=current_user, users=users, skills=skills, cities=cities, countries=countries)
 
 @views.route('/delete-note', methods=['POST'])
 def delete_note():  

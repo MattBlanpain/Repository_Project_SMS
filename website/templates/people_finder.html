@@ -224,8 +224,10 @@
     </table>
     <br>
     {% else %}
+        {% if selected_min_proficiency_1 %}    
         <br>
         <h3>No Matching Users. You may lower minimum proficiency levels required.</h3>
+        {% endif %}
     {% endif %}
 {% endblock %}
 
