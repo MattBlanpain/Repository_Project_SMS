@@ -763,14 +763,12 @@ def save_picture(form_picture):
     picture_fn = random_hex + f_ext
 
     fn = getattr(sys.modules['__main__'], '__file__')
-    #root_path = os.path.abspath(os.path.dirname(fn))
-    the_path = 'c:/Users/mabl01/Documents/Project_SMS/website'
-    picture_path = os.path.join(the_path, 'static/profile_pics', picture_fn)
-    #picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+    root_path = os.path.abspath(os.path.dirname(fn))
+    picture_path = os.path.join(root_path, 'website/static/profile_pics', picture_fn)
 
-    cwd = os.getcwd()  # Get the current working directory (cwd)
-    files = os.listdir(cwd)  # Get all the files in that directory
-    print("Files in %r: %s" % (cwd, files))
+    #cwd = os.getcwd()  # Get the current working directory (cwd)
+    #files = os.listdir(cwd)  # Get all the files in that directory
+    #print("Files in %r: %s" % (cwd, files))
 
     output_size = (125, 125)
     i = Image.open(form_picture)
