@@ -12,7 +12,7 @@
         {% for user in users %}
             <li class="list-group-item">
                 <img class="rounded-circle account-img" src="/static/profile_pics/{{ user.image_file }}" class="avatar avatar-sm" style="width:30px;height:30px;">
-                {{ user.first_name }} , {{ user.last_name }} <a href="{{ url_for('views.display_user', user_id=user.id) }}"> go to user profile</a>
+                {{ user.first_name }} , {{ user.last_name }} <a href="{{ url_for('views.user', user_id=user.id) }}"> go to user profile</a>
                 <div>
                     from: {{ get_city_name_from_user(user.from_city_id) }}
                 </div>

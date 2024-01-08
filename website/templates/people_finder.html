@@ -153,7 +153,7 @@
                 <tr>
                     <td bgcolor="#58D68D">
                         <img class="rounded-circle account-img" src="/static/profile_pics/{{ user.image_file }}" class="avatar avatar-sm" style="width:30px;height:30px;">
-                        {{ user.first_name }} {{ user.last_name }} - from: {{ get_city_name_from_user(user.from_city_id) }} , <a href="{{ url_for('views.display_user', user_id=user.id) }}"> go to user profile</a>
+                        {{ user.first_name }} {{ user.last_name }} - from: {{ get_city_name_from_user(user.from_city_id) }} , <a href="{{ url_for('views.user', user_id=user.id) }}"> go to user profile</a>
                     </td>
                     <!-- Display proficiency levels in different columns -->
                     <td>

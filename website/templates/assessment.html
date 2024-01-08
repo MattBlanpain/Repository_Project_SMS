@@ -124,8 +124,7 @@
   <form method="POST" action="{{ url_for('views.update_proficiencies') }}">
     <br>
     <button type="submit" class="btn btn-success" onClick="update_proficiencies">Update my Proficiency Levels</button>
-    {% if filtered_by_category == "yes" or filtered_by_group == "yes" %}&nbsp; &nbsp; {{list_skills|length }} skills are displayed on {{ total_skills }} skills in total in directory. &nbsp;
-    {% endif %}
+    {% if filtered_by_category == "yes" or filtered_by_group == "yes" %}&nbsp; &nbsp; {{list_skills|length }} skills are displayed on{% endif %} {{ total_skills }} skills in total in directory.
     <br>
     <br>
   <table class="scrolldown"> 
