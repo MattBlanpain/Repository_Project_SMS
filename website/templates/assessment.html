@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% block title %}
+  Assessment
+{% endblock %}
+{% block content %}
+<h1>Proficiency Levels for : {{ user.first_name }} {{ user.last_name }}</h1>
+<div class="container-fluid">
+  <div class="row" style="border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;width:100%;padding:5px;background-color:grey;">
+    <div class="col-2">
+      <div title="0=I didn’t evaluate this yet. Perhaps I'am good, perhaps I'm bad at it." style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:160px;background-color:black ; color:#FFFFFF;padding:5px;text-align:center;font-size: 0.875em;">
+        0: Not Evaluated
+      </div>
+    </div>
+    <div class="col-2">
+      <div title="1=I just know what this is. Or even don't." style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:160px;background-color:#05106E ; color:#FFFFFF;padding:5px;text-align:center;font-size: 0.875em;">
+        1: No Awareness
+      </div>
+    </div>
+    <div class="col-2">
+      <div title="2=I’ve done this a few times and I’m familiar, but I still need supervision." style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:160px;background-color:#0A37A6 ; color:#FFFFFF;padding:5px;text-align:center;font-size: 0.875em;">
+        2: Beginner / Learn
+      </div>
+    </div>
+    <div class="col-2">
+      <div title="3=I’ve done this multiple times and can do this well, with only seldom expert support." style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:160px;background-color:#007DFF ; color:#FFFFFF;padding:5px;text-align:center;font-size: 0.875em;">
+        3: Intermediate / Deliver
+      </div>
+    </div>
+    <div class="col-2">
+      <div title="4=I’ve done this in multiple companies, industries, and can design and lead a project. I can conduct a training." style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:160px;background-color:#0CA4EB ; color:#FFFFFF;padding:5px;text-align:center;font-size: 0.875em;">
+        4: Advanced / Perform
+      </div>
+    </div>
+    <div class="col-2">
+      <div title="5=I’m a global expert at this and I could “write the book” or “teach a masterclass” on this." style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:160px;background-color:#0DE0FF ; color:#FFFFFF;padding:5px;text-align:center;font-size: 0.875em;">
+        5: Expert / Coach
+      </div>
+    </div>
+  </div>
+</div>
+
+<style> 
+  table.scrolldown { 
+      width: 100%; 
+        
+      /* border-collapse: collapse; */ 
+      border-spacing: 0; 
+      border: 2px solid black; 
+  } 
+    
+  /* To display the block as level element */ 
+  table.scrolldown tbody, table.scrolldown thead { 
+      display: block; 
+  }  
+    
+  thead tr th { 
+      height: 15px;  
+      line-height: 15px; 
+  } 
+    
+  table.scrolldown tbody { 
+        
+      /* Set the height of table body */ 
+      height: 300px;  
+        
+      /* Set vertical scroll */ 
+      overflow-y: auto; 
+        
+      /* Hide the horizontal scroll */ 
+      overflow-x: hidden;  
+  } 
+    
+  tbody {  
+      border-top: 2px solid black; 
+  } 
+    
+  tbody td, thead th { 
+      width : 200px; 
+      border-right: 2px solid black; 
+  } 
+  td { 
+      text-align:center; 
+  } 
+</style> 
+<br>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-5">
+      <div style="font-size: 0.875em;">
+        <form method="POST" action="{{ url_for('views.assessment') }}">
+          <label for="group_filter">Filter by Group:</label>
+          <select name="group_filter" id="group_filter">
+              <option value="all">Show All Groups</option>
+              {% for group in groups %}
+                  <option value="{{ group.group_id }}">{{ group.group_name }}</option>
+              {% endfor %}
+          </select>
+          <button type="submit">Apply Group Filter</button>
+        </form>
+      </div>
+    </div>
+    <div class="col-5">
+      <div style="font-size: 0.875em;">
+        <form method="POST" action="{{ url_for('views.assessment') }}">
+          <label for="category_filter">Filter by Category:</label>
+          <select name="category_filter" id="category_filter">
+              <option value="all">Show All Categories</option>
+              {% for category in categories %}
+                  <option value="{{ category.category_id }}">{{ category.category_name }}</option>
+              {% endfor %}
+          </select>
+          <button type="submit">Apply Category Filter</button>
+        </form>
+      </div>
+    </div>
+    <div class="col-2">
+      <div style="font-size: 0.875em;">
+        <button onclick="showAllSkills()">Remove Filters</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+  <form method="POST" action="{{ url_for('views.update_proficiencies') }}">
+    <br>
+    <button type="submit" class="btn btn-success" onClick="update_proficiencies">Update my Proficiency Levels</button>
+    {% if filtered_by_category == "yes" or filtered_by_group == "yes" %}&nbsp; &nbsp; {{list_skills|length }} skills are displayed on {{ total_skills }} skills in total in directory. &nbsp;
+    {% endif %}
+    <br>
+    <br>
+  <table class="scrolldown"> 
+    <thead> 
+        <tr> 
+            <th>Skill</th> 
+            <th>Current Level</th> 
+            <th>Updated Level</th> 
+            {% if filtered_by_group == "yes" %}<th style="background-color: red;">{% else %}<th>{% endif %}Group</th>
+            {% if filtered_by_category == "yes" %}<th style="background-color: red;">{% else %}<th>{% endif %}Category</th>
+        </tr> 
+    </thead> 
+    <tbody>
+      {% for skill in list_skills %}
+        <tr> 
+            <td>{{ skill.skill_name }}</td> 
+            {% if proficiency_levels[skill.skill_id] == 0 %}<td data-id="0">0: Not Evaluated{% endif %}
+            {% if proficiency_levels[skill.skill_id] == 1 %}<td data-id="1">1: No Awareness{% endif %}
+            {% if proficiency_levels[skill.skill_id] == 2 %}<td data-id="2">2: Beginner / Learn{% endif %}
+            {% if proficiency_levels[skill.skill_id] == 3 %}<td data-id="3">3: Intermediate / Deliver{% endif %}
+            {% if proficiency_levels[skill.skill_id] == 4 %}<td data-id="4">4: Advanced / Perform{% endif %}
+            {% if proficiency_levels[skill.skill_id] == 5 %}<td data-id="5">5: Expert / Coach{% endif %}
+            </td> 
+            <td>
+              <label for="skill_{{ skill.skill_id }}">
+              </label>
+              <input type="radio" name="{{ skill.skill_id }}" id="skill_{{ skill.skill_id }}" value="0" {% if proficiency_levels[skill.skill_id] == 0 %}checked{% endif %}>0
+              <input type="radio" name="{{ skill.skill_id }}" id="skill_{{ skill.skill_id }}" value="1" {% if proficiency_levels[skill.skill_id] == 1 %}checked{% endif %}>1
+              <input type="radio" name="{{ skill.skill_id }}" id="skill_{{ skill.skill_id }}" value="2" {% if proficiency_levels[skill.skill_id] == 2 %}checked{% endif %}>2
+              <input type="radio" name="{{ skill.skill_id }}" id="skill_{{ skill.skill_id }}" value="3" {% if proficiency_levels[skill.skill_id] == 3 %}checked{% endif %}>3
+              <input type="radio" name="{{ skill.skill_id }}" id="skill_{{ skill.skill_id }}" value="4" {% if proficiency_levels[skill.skill_id] == 4 %}checked{% endif %}>4
+              <input type="radio" name="{{ skill.skill_id }}" id="skill_{{ skill.skill_id }}" value="5" {% if proficiency_levels[skill.skill_id] == 5 %}checked{% endif %}>5
+            </td> 
+            <td>
+              {% if skill.parent_group %} {{ skill.get_group_name_for_skill() }}
+              {% else %} No Group
+              {% endif %}
+            </td> 
+            <td>
+              {% if skill.parent_group %} {{ skill.get_category_name_for_skill() }}
+              {% else %} No Category
+              {% endif %}
+            </td> 
+        </tr>
+      {% endfor %}
+    </tbody> 
+  </table> 
+  <br>
+  </form>
+</div>
+
+<script>
+  function showOnlyGroup() {
+      var selectedGroup = document.getElementById("group_filter").value;
+      if (selectedGroup !== "all") {
+          // Reload the page with the selected group filter
+          window.location.href = "/assessment?group=" + selectedGroup;
+      }
+  }
+
+  function showAllSkills() {
+      // Reload the page to show all skills
+      window.location.href = "/assessment";
+  }
+
+  function showOnlyCategory() {
+      var selectedCategory = document.getElementById("category_filter").value;
+      if (selectedCategory !== "all") {
+          // Reload the page with the selected category filter
+          window.location.href = "assessment";
+          // window.location.href = "/assessment?category=" + selectedCategory;
+      }
+  }
+</script>
+
+
+{% endblock %}

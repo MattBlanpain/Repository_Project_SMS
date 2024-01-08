@@ -11,19 +11,33 @@ th {
 }
 
 td {
-    text-align: center;
-    padding: 10px;
-    font-weight: normal;
-    color: #fff;
-    font-size: 0.875em
-  }
-  
-td[data-value="0"] {    background: #000; /* Black for 0 */   }
-td[data-value="1"] {    background: #05106E; /* Your custom color for 1 */  }
-td[data-value="2"] {    background: #0A37A6; /* Your custom color for 2 */  }
-td[data-value="3"] {    background: #007DFF; /* Your custom color for 3 */  }
-td[data-value="4"] {    background: #0CA4EB; /* Your custom color for 4 */  }
-td[data-value="5"] {    background: #0DE0FF; /* Your custom color for 5 */  }
+  text-align: center;
+  padding: 10px;
+  font-weight: normal;
+  color: #fff;
+  font-size: 0.875em
+}
+
+table.scrolldown td {
+  text-align: center;
+  padding: 10px;
+  font-weight: normal;
+  color: black;
+  font-size: 0.875em
+}
+
+td[data-value="0"] {    background: #000; color: #fff;  }
+td[data-value="1"] {    background: #05106E; color: #fff;  }
+td[data-value="2"] {    background: #0A37A6; color: #fff;  }
+td[data-value="3"] {    background: #007DFF; color: #fff;  }
+td[data-value="4"] {    background: #0CA4EB; color: #fff;  }
+td[data-value="5"] {    background: #0DE0FF; color: #fff;  }
+table.scrolldown td[data-id="0"] {    background: #000; color: #fff;  }
+table.scrolldown td[data-id="1"] {    background: #05106E; color: #fff;  }
+table.scrolldown td[data-id="2"] {    background: #0A37A6; color: #fff;  }
+table.scrolldown td[data-id="3"] {    background: #007DFF; color: #fff;  }
+table.scrolldown td[data-id="4"] {    background: #0CA4EB; color: #fff;  }
+table.scrolldown td[data-id="5"] {    background: #0DE0FF; color: #fff;  }
 
 #proficiencyMatrix td:first-child {     color: #000; /* Black text color for the first column */ }
 #proficiency_levels_edit td {     color: #000; /* Black text color */ }
