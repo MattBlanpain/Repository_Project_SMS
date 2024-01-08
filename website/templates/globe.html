@@ -4,8 +4,6 @@
 {% endblock %}
 {% block content %}
 
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<body>
     <h1 align="center">Users location by countries</h1>
     <br>
     These charts display where the users are located on the globe.
@@ -21,8 +19,7 @@
           </div>
       </div>
     </section>
-</body>
-   
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
   <script type='text/javascript'>
     var graphs = {{graphJSON | safe}};

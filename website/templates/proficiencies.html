@@ -6,16 +6,42 @@
 
 {% block content %}
 <h1 align="center">Proficiency Matrix</h1>
-<p>This table displays proficiencies for all users, for all skills. Filter by category or group of skills.</p>
-<span style = "background-color:black ; color:#FFFFFF; font-size: 0.875em">&nbsp; 0-Not Evaluated &nbsp;</span>
-<span style = "background-color:#05106E ; color:#FFFFFF; font-size: 0.875em">&nbsp; 1-No Awareness &nbsp;</span>
-<span style = "background-color:#0A37A6 ; color:#FFFFFF; font-size: 0.875em">&nbsp; 2-Beginner / Learn &nbsp;</span>
-<span style = "background-color:#007DFF ; color:#FFFFFF; font-size: 0.875em">&nbsp; 3-Intermediate / Deliver &nbsp;</span>
-<span style = "background-color:#0CA4EB ; color:#FFFFFF; font-size: 0.875em">&nbsp; 4-Advanced / Perform &nbsp;</span>
-<span style = "background-color:#0DE0FF ; color:#FFFFFF; font-size: 0.875em">&nbsp; 5-Expert / Coach &nbsp;</span>
+<div class="container-fluid">
+    <div class="row" style="border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;width:100%;padding:5px;background-color:grey;">
+      <div class="col-2">
+        <div title="0=I didn’t evaluate this yet. Perhaps I'am good, perhaps I'm bad at it." style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:160px;background-color:black ; color:#FFFFFF;padding:5px;text-align:center;font-size: 0.875em;">
+          0: Not Evaluated
+        </div>
+      </div>
+      <div class="col-2">
+        <div title="1=I just know what this is. Or even don't." style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:160px;background-color:#05106E ; color:#FFFFFF;padding:5px;text-align:center;font-size: 0.875em;">
+          1: No Awareness
+        </div>
+      </div>
+      <div class="col-2">
+        <div title="2=I’ve done this a few times and I’m familiar, but I still need supervision." style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:160px;background-color:#0A37A6 ; color:#FFFFFF;padding:5px;text-align:center;font-size: 0.875em;">
+          2: Beginner / Learn
+        </div>
+      </div>
+      <div class="col-2">
+        <div title="3=I’ve done this multiple times and can do this well, with only seldom expert support." style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:160px;background-color:#007DFF ; color:#FFFFFF;padding:5px;text-align:center;font-size: 0.875em;">
+          3: Intermediate / Deliver
+        </div>
+      </div>
+      <div class="col-2">
+        <div title="4=I’ve done this in multiple companies, industries, and can design and lead a project. I can conduct a training." style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:160px;background-color:#0CA4EB ; color:#FFFFFF;padding:5px;text-align:center;font-size: 0.875em;">
+          4: Advanced / Perform
+        </div>
+      </div>
+      <div class="col-2">
+        <div title="5=I’m a global expert at this and I could “write the book” or “teach a masterclass” on this." style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:160px;background-color:#0DE0FF ; color:#FFFFFF;padding:5px;text-align:center;font-size: 0.875em;">
+          5: Expert / Coach
+        </div>
+      </div>
+    </div>
+  </div>
 <br>
-<br>
-<div>
+  <div style="font-size: 0.875em;">
     Filter by Group:
     <select id="groupFilter">
         <option value="all">All Groups</option>
@@ -31,13 +57,16 @@
         <option value="all">All Categories</option>
         <!-- Options will be dynamically populated with available categories -->
         {% for category in available_categories %}
-            <option value="{{ category.category_id }}" {% if category.category_id == selected_category_id  %} selected {% endif %}>{{ category.category_name }}</option>
+            <option value="{{ category.category_id }}" {% if category.category_id == selected_category_id %} selected {% endif %}>{{ category.category_name }}</option>
         {% endfor %}
     </select>
     <button onclick="showOnlyCategory()">Apply Category filter</button>
     &nbsp;&nbsp;&nbsp;&nbsp;
-    <button onclick="showAllSkills()">Show All Skills</button>
+    <button onclick="showAllSkills()">Remove Filters</button>
 </div>
+
+<!--{% if filtered_by_category == "yes" or filtered_by_group == "yes" %}&nbsp; &nbsp; {{list_skills|length }} skills are displayed on{% endif %} {{ total_skills }} skills in total in directory.-->
+
 <br>
 <table id="proficiencyMatrix" class="display">
     <thead>

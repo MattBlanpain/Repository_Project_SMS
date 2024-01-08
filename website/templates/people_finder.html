@@ -8,20 +8,27 @@
 
     <h1>People Finder</h1>
     <br>
-    <form method="post">
+    <form method="post" style="font-size: 0.875em;">
         <label for="skill1">skilled in: </label>
         <select name="skill1" id="skill1">
-            {% for skill in skills %}
-                <option value="{{ skill.skill_id }}" {% if skill.skill_id == selected_skill_1 %} selected {% endif %}>
-                    {{ skill.skill_name }}
-                </option>
+            {% for group in groups %}
+                <hr />
+                <optgroup label="{{ group.group_name }}">
+                    {% if group.child_skills %}
+                        {% for skill in group.child_skills %}
+                            <option value="{{ skill.skill_id }}" {% if skill.skill_id == selected_skill_1 %} selected {% endif %}>
+                                {{ skill.skill_name }}
+                            </option>
+                        {% endfor %}
+                    {% endif %}
+                </optgroup>
             {% endfor %}
         </select>
         <label for="min_proficiency1"> with a proficiency of at least: </label>
         <select name="min_proficiency1" id="min_proficiency1">
             {% for level in range(6) %}
                 <option value="{{ level }}" {% if level == selected_min_proficiency_1 %} selected {% endif %}>
-                    {% if level == 0 %} ignore this skill {% endif %}
+                    {% if level == 0 %} Ignore this skill {% endif %}
                     {% if level == 1 %} 1 - No Awareness {% endif %}
                     {% if level == 2 %} 2 - Beginner / Learn {% endif %}
                     {% if level == 3 %} 3 - Intermediate / Deliver {% endif %}
@@ -33,17 +40,24 @@
         <br>
         <label for="skill1">skilled in: </label>
         <select name="skill2" id="skill2">
-            {% for skill in skills %}
-                <option value="{{ skill.skill_id }}" {% if skill.skill_id == selected_skill_2 %} selected {% endif %}>
-                    {{ skill.skill_name }}
-                </option>
+            {% for group in groups %}
+                <hr />
+                <optgroup label="{{ group.group_name }}">
+                    {% if group.child_skills %}
+                        {% for skill in group.child_skills %}
+                            <option value="{{ skill.skill_id }}" {% if skill.skill_id == selected_skill_2 %} selected {% endif %}>
+                                {{ skill.skill_name }}
+                            </option>
+                        {% endfor %}
+                    {% endif %}
+                </optgroup>
             {% endfor %}
         </select>
         <label for="min_proficiency2"> with a proficiency of at least: </label>
         <select name="min_proficiency2" id="min_proficiency2">
             {% for level in range(6) %}
                 <option value="{{ level }}" {% if level == selected_min_proficiency_2 %} selected {% endif %}>
-                    {% if level == 0 %} ignore this skill {% endif %}
+                    {% if level == 0 %} Ignore this skill {% endif %}
                     {% if level == 1 %} 1 - No Awareness {% endif %}
                     {% if level == 2 %} 2 - Beginner / Learn {% endif %}
                     {% if level == 3 %} 3 - Intermediate / Deliver {% endif %}
@@ -55,17 +69,24 @@
         <br>
         <label for="skill13">skilled in: </label>
         <select name="skill3" id="skill3">
-            {% for skill in skills %}
-                <option value="{{ skill.skill_id }}" {% if skill.skill_id == selected_skill_3 %} selected {% endif %}>
-                    {{ skill.skill_name }}
-                </option>
+            {% for group in groups %}
+                <hr />
+                <optgroup label="{{ group.group_name }}">
+                    {% if group.child_skills %}
+                        {% for skill in group.child_skills %}
+                            <option value="{{ skill.skill_id }}" {% if skill.skill_id == selected_skill_3 %} selected {% endif %}>
+                                {{ skill.skill_name }}
+                            </option>
+                        {% endfor %}
+                    {% endif %}
+                </optgroup>
             {% endfor %}
         </select>
         <label for="min_proficiency3"> with a proficiency of at least: </label>
         <select name="min_proficiency3" id="min_proficiency3">
             {% for level in range(6) %}
                 <option value="{{ level }}" {% if level == selected_min_proficiency_3 %} selected {% endif %}>
-                    {% if level == 0 %} ignore this skill {% endif %}
+                    {% if level == 0 %} Ignore this skill {% endif %}
                     {% if level == 1 %} 1 - No Awareness {% endif %}
                     {% if level == 2 %} 2 - Beginner / Learn {% endif %}
                     {% if level == 3 %} 3 - Intermediate / Deliver {% endif %}
@@ -77,17 +98,24 @@
         <br>
         <label for="skill4">skilled in: </label>
         <select name="skill4" id="skill4">
-            {% for skill in skills %}
-                <option value="{{ skill.skill_id }}" {% if skill.skill_id == selected_skill_4 %} selected {% endif %}>
-                    {{ skill.skill_name }}
-                </option>
+            {% for group in groups %}
+                <hr />
+                <optgroup label="{{ group.group_name }}">
+                    {% if group.child_skills %}
+                        {% for skill in group.child_skills %}
+                            <option value="{{ skill.skill_id }}" {% if skill.skill_id == selected_skill_4 %} selected {% endif %}>
+                                {{ skill.skill_name }}
+                            </option>
+                        {% endfor %}
+                    {% endif %}
+                </optgroup>
             {% endfor %}
         </select>
         <label for="min_proficiency4"> with a proficiency of at least: </label>
         <select name="min_proficiency4" id="min_proficiency4">
             {% for level in range(6) %}
                 <option value="{{ level }}" {% if level == selected_min_proficiency_4 %} selected {% endif %}>
-                    {% if level == 0 %} ignore this skill {% endif %}
+                    {% if level == 0 %} Ignore this skill {% endif %}
                     {% if level == 1 %} 1 - No Awareness {% endif %}
                     {% if level == 2 %} 2 - Beginner / Learn {% endif %}
                     {% if level == 3 %} 3 - Intermediate / Deliver {% endif %}
@@ -99,17 +127,24 @@
         <br>
         <label for="skill5">skilled in: </label>
         <select name="skill5" id="skill5">
-            {% for skill in skills %}
-                <option value="{{ skill.skill_id }}" {% if skill.skill_id == selected_skill_5 %} selected {% endif %}>
-                    {{ skill.skill_name }}
-                </option>
+            {% for group in groups %}
+                <hr />
+                <optgroup label="{{ group.group_name }}">
+                    {% if group.child_skills %}
+                        {% for skill in group.child_skills %}
+                            <option value="{{ skill.skill_id }}" {% if skill.skill_id == selected_skill_5 %} selected {% endif %}>
+                                {{ skill.skill_name }}
+                            </option>
+                        {% endfor %}
+                    {% endif %}
+                </optgroup>
             {% endfor %}
         </select>
         <label for="min_proficiency5"> with a proficiency of at least: </label>
         <select name="min_proficiency5" id="min_proficiency5">
             {% for level in range(6) %}
                 <option value="{{ level }}" {% if level == selected_min_proficiency_5 %} selected {% endif %}>
-                    {% if level == 0 %} ignore this skill {% endif %}
+                    {% if level == 0 %} Ignore this skill {% endif %}
                     {% if level == 1 %} 1 - No Awareness {% endif %}
                     {% if level == 2 %} 2 - Beginner / Learn {% endif %}
                     {% if level == 3 %} 3 - Intermediate / Deliver {% endif %}
@@ -129,7 +164,7 @@
     <table border="1">
         <thead>
             <tr>
-                <th>User</th>
+                <th>Matching User</th>
                 <th>{% for skill in skills %}
                     {% if skill.skill_id == selected_skill_1 %}  {{ skill.skill_name }} {% endif %}
                     {% endfor %}</th>

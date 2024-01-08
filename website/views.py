@@ -118,12 +118,15 @@ def display_proficiency_matrix():
     if selected_group_id and selected_group_id != "all":
         # Filter skills by selected group
         list_all_skills = Skill.query.filter_by(parent_group=selected_group_id).all()
+        selected_group_id= int(selected_group_id)
+
 
     if selected_category_id and selected_category_id != "all":
         # Filter skills by selected category (fetching all groups in the category)
         groups_in_category = SkillGroup.query.filter_by(parent_category=selected_category_id).all()
         group_ids_in_category = [group.group_id for group in groups_in_category]
         list_all_skills = Skill.query.filter(Skill.parent_group.in_(group_ids_in_category)).all()
+        selected_category_id= int(selected_category_id)
 
     proficiency_matrix = pd.DataFrame(0, index=[a_user.id for a_user in list_all_users], columns=[a_skill.skill_id for a_skill in list_all_skills])
 
@@ -133,7 +136,7 @@ def display_proficiency_matrix():
         for_skill = an_assessment.for_skill
         proficiency = int(an_assessment.proficiency_level.value)
         proficiency_matrix.at[for_user, for_skill] = proficiency
-
+    
     return render_template('proficiencies.html', list_all_skills=list_all_skills, list_all_users=list_all_users, matrix=proficiency_matrix, user=current_user, available_groups=available_groups, available_categories=available_categories, selected_group_id=selected_group_id, selected_category_id=selected_category_id)
 
 @views.route('/init-10-users', methods=['GET'])
@@ -292,6 +295,7 @@ def display_skills_directory():
 @views.route('/people_finder', methods=['GET', 'POST'])
 def people_finder():
     skills = Skill.query.all()
+    groups = SkillGroup.query.all()
     cities = {city.city_id: city.city_name for city in City.query.all()}
     # Define the function within the route handler
     def get_city_name_from_user(id):
@@ -411,10 +415,10 @@ def people_finder():
 
         # 'common_users' now contains the users that are present in both lists based on their IDs
 
-        return render_template('people_finder.html', skills=skills, users=common_users, user=current_user,
+        return render_template('people_finder.html', skills=skills, groups=groups, users=common_users, user=current_user,
                                selected_skill_1=skill_id_1, selected_min_proficiency_1=min_proficiency_1, selected_skill_2=skill_id_2, selected_min_proficiency_2=min_proficiency_2, selected_skill_3=skill_id_3, selected_min_proficiency_3=min_proficiency_3,selected_skill_4=skill_id_4, selected_min_proficiency_4=min_proficiency_4,selected_skill_5=skill_id_5, selected_min_proficiency_5=min_proficiency_5, get_city_name_from_user=get_city_name_from_user)
 
-    return render_template('people_finder.html', skills=skills, user=current_user)
+    return render_template('people_finder.html', skills=skills, groups=groups, user=current_user)
 
 @views.route('/qualifications', methods=['GET', 'POST'])
 def user_qualifications():
@@ -815,7 +819,7 @@ def user(user_id):
     cities = {city.city_id: city.city_name for city in City.query.all()}
 
     # Calculate proficiency counts for each level
-    assessments = Assessment.query.filter_by(for_user=current_user.id).all()
+    assessments = Assessment.query.filter_by(for_user=selected_user.id).all()
     proficiency_levels = {assessment.for_skill: assessment.proficiency_level.value for assessment in assessments}
     proficiency_counts = Counter(proficiency_levels.values())
 

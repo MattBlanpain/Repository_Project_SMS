@@ -9,14 +9,40 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <body>
     <h1 align="center">Proficiency Sunburst Chart for {{ selected_user.first_name }} {{ selected_user.last_name }}.</h1>
-    <br>
-    <span style = "background-color:black ; color:#FFFFFF; font-size: 0.875em">&nbsp; 0-Not Evaluated &nbsp;</span>
-    <span style = "background-color:#05106E ; color:#FFFFFF; font-size: 0.875em">&nbsp; 1-No Awareness &nbsp;</span>
-    <span style = "background-color:#0A37A6 ; color:#FFFFFF; font-size: 0.875em">&nbsp; 2-Beginner / Learn &nbsp;</span>
-    <span style = "background-color:#007DFF ; color:#FFFFFF; font-size: 0.875em">&nbsp; 3-Intermediate / Deliver &nbsp;</span>
-    <span style = "background-color:#0CA4EB ; color:#FFFFFF; font-size: 0.875em">&nbsp; 4-Advanced / Perform &nbsp;</span>
-    <span style = "background-color:#0DE0FF ; color:#FFFFFF; font-size: 0.875em">&nbsp; 5-Expert / Coach &nbsp;</span>
-    <br>
+    <div class="container-fluid">
+      <div class="row" style="border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;width:100%;padding:5px;background-color:grey;">
+        <div class="col-2">
+          <div title="0=I didn’t evaluate this yet. Perhaps I'am good, perhaps I'm bad at it." style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:160px;background-color:black ; color:#FFFFFF;padding:5px;text-align:center;font-size: 0.875em;">
+            0: Not Evaluated
+          </div>
+        </div>
+        <div class="col-2">
+          <div title="1=I just know what this is. Or even don't." style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:160px;background-color:#05106E ; color:#FFFFFF;padding:5px;text-align:center;font-size: 0.875em;">
+            1: No Awareness
+          </div>
+        </div>
+        <div class="col-2">
+          <div title="2=I’ve done this a few times and I’m familiar, but I still need supervision." style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:160px;background-color:#0A37A6 ; color:#FFFFFF;padding:5px;text-align:center;font-size: 0.875em;">
+            2: Beginner / Learn
+          </div>
+        </div>
+        <div class="col-2">
+          <div title="3=I’ve done this multiple times and can do this well, with only seldom expert support." style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:160px;background-color:#007DFF ; color:#FFFFFF;padding:5px;text-align:center;font-size: 0.875em;">
+            3: Intermediate / Deliver
+          </div>
+        </div>
+        <div class="col-2">
+          <div title="4=I’ve done this in multiple companies, industries, and can design and lead a project. I can conduct a training." style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:160px;background-color:#0CA4EB ; color:#FFFFFF;padding:5px;text-align:center;font-size: 0.875em;">
+            4: Advanced / Perform
+          </div>
+        </div>
+        <div class="col-2">
+          <div title="5=I’m a global expert at this and I could “write the book” or “teach a masterclass” on this." style="border-radius:15px;-webkit-border-radius:15px;-moz-border-radius:15px;width:160px;background-color:#0DE0FF ; color:#FFFFFF;padding:5px;text-align:center;font-size: 0.875em;">
+            5: Expert / Coach
+          </div>
+        </div>
+      </div>
+    </div>
     <br>
     This sunburst chart displays user's proficiency for all skills.
     Click on an inner circle to filter the chart.
