@@ -755,7 +755,7 @@ def note():
             new_note = Note(data=note, user_id=current_user.id)  #providing the schema for the note 
             db.session.add(new_note) #adding the note to the database 
             db.session.commit()
-            flash('Note added!', category='success')
+            flash('Enhancement Request added!', category='success')
 
     return render_template("note.html", user=current_user)
 
@@ -898,3 +898,11 @@ def update_proficiencies():
             db.session.commit()
     
     return redirect(url_for('views.assessment'))
+
+@views.route('/backlog', methods=['GET'])
+@login_required
+def backlog():
+    users = User.query.all()
+    notes = Note.query.all()
+    
+    return render_template('backlog.html', user=current_user,notes=notes, users=users)

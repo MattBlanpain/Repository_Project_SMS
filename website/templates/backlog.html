@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}
+  Backlog
+{% endblock %}
+{% block content %}
+
+    <h1 align="center">Backlog of all Enhancement Requests</h1>
+    <br>
+    All registered suggestions about how this tool could be improved.
+    <br>
+    <br>
+    <button class="btn btn-secondary" title="Add an enhancement request." onclick="window.location.href='/note'">
+      &#x1F4A1; Propose Enhancements
+    </button>
+    <br>
+    <ul class="list-group list-group-flush" id="notes">
+      {% for user in users %}
+        {% for note in user.notes %}
+        <li class="list-group-item">
+          {{ note.data }}
+        </li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+{% endblock %}

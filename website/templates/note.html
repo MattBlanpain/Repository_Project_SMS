@@ -4,10 +4,14 @@
 {% endblock %}
 {% block content %}
 
-    <h1 align="center">Enhancement Requests</h1>
+    <h1 align="center">Enhancement Requests from {{ user.first_name }} {{ user.last_name }}</h1>
     <br>
     Please write here your suggestions how this tool could be improved. Thank you.
     <br>
+    <br>
+    <button class="btn btn-secondary" title="Show all registered enhancement requests." onclick="window.location.href='/backlog'">
+      &#x1F4A1; Show backlog
+    </button>
     <br>
     <ul class="list-group list-group-flush" id="notes">
       {% for note in user.notes %}
@@ -23,7 +27,7 @@
       <textarea name="note" id="note" class="form-control"></textarea>
       <br />
       <div align="center">
-        <button type="submit" class="btn btn-primary">Add E.R.</button>
+        <button type="submit" class="btn btn-primary">Add Enhancement Request</button>
       </div>
     </form>
 {% endblock %}
